@@ -1,0 +1,42 @@
+import { z } from 'zod';
+export declare const ENV_SCHEMA: z.ZodObject<{
+    ALERTBOX_JWT_SECRET: z.ZodString;
+    DATABASE_URL: z.ZodString;
+    DINGER_CALLBACK_KEY: z.ZodString;
+    DINGER_PAYMENT_URL: z.ZodString;
+    DINGER_PROJECT_NAME: z.ZodString;
+    DINGER_MERCHANT_NAME: z.ZodString;
+    DINGER_API_KEY: z.ZodString;
+    DINGER_API_PUBLIC_KEY: z.ZodString;
+    AXIOM_TOKEN: z.ZodString;
+    AXIOM_ORG_ID: z.ZodString;
+    SHADOW_DATABASE_URL: z.ZodString;
+    PAYMENT_JWT_SECRET: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    ALERTBOX_JWT_SECRET: string;
+    DATABASE_URL: string;
+    DINGER_CALLBACK_KEY: string;
+    DINGER_PAYMENT_URL: string;
+    DINGER_PROJECT_NAME: string;
+    DINGER_MERCHANT_NAME: string;
+    DINGER_API_KEY: string;
+    DINGER_API_PUBLIC_KEY: string;
+    AXIOM_TOKEN: string;
+    AXIOM_ORG_ID: string;
+    SHADOW_DATABASE_URL: string;
+    PAYMENT_JWT_SECRET: string;
+}, {
+    ALERTBOX_JWT_SECRET: string;
+    DATABASE_URL: string;
+    DINGER_CALLBACK_KEY: string;
+    DINGER_PAYMENT_URL: string;
+    DINGER_PROJECT_NAME: string;
+    DINGER_MERCHANT_NAME: string;
+    DINGER_API_KEY: string;
+    DINGER_API_PUBLIC_KEY: string;
+    AXIOM_TOKEN: string;
+    AXIOM_ORG_ID: string;
+    SHADOW_DATABASE_URL: string;
+    PAYMENT_JWT_SECRET: string;
+}>;
+export type ENV_VARS = z.infer<typeof ENV_SCHEMA>;

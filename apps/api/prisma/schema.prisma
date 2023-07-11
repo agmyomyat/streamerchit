@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+model User{
+  id                        String  @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  Balance                   Balance?
+  payment_transaction       PaymentTransaction[]
+  donation                  Donation[]
+  donation_setting          DonationSetting?
+  payout                    Payout[]
+  payout_info               PayoutInfo[]
+  donation_page             DonationPage?
+}
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Balance {
+  id                String @id  @default(cuid())
+  user_id           String @unique
+  active_total      Int   @default(0)
+  real_total        Int   @default(0)
+  user              User   @relation(fields: [user_id],references: [id])
+
+}
+
+model PaymentTransaction {
+  id                    String @id @default(cuid())
+  created_at            DateTime  @default(now())
+  completed_at          DateTime?
+  payment_provider      String
+  method_name           String
+  transaction_id        String
+  status                String?
+  doner_name            String @db.VarChar(255)
+  memo                  String
+  total_amount          Int
+  user_id               String
+  user                  User  @relation(fields: [user_id],references: [id])
+  donation              Donation?
+}
+
+model Donation {
+  id                      String @id  @default(cuid())
+  created_at              DateTime  @default(now())
+  payment_transaction_id  String  @unique
+  payment_transaction     PaymentTransaction  @relation(fields: [payment_transaction_id],references: [id])
+  user_id                 String  
+  user                    User  @relation(fields: [user_id],references: [id])
+
+}
+
+model PaymentProvider {
+  id                String @id @default(cuid())
+  name              String  
+  method            String  
+  fee_percentage    String
+  fix_amount        String?
+  redirect_url      String?
+  @@unique([name,method])
+}
+
+model DonationSetting {
+  id                        String @id  @default(cuid())
+  image_href                String
+  duration                  Int 
+  font_weight               Int
+  font_size                 String
+  font_color                String
+  message_font_size         String
+  message_font_color        String
+  message_font_weight       Int 
+  sound_href                String
+  user_id                   String @unique
+  user                      User   @relation(fields: [user_id],references: [id])
+}
+model DonationPage {
+  id                        String  @id   @default(cuid())
+  page_cover                String?
+  url_handle                String @unique
+  avatar_url                String
+  user_id                   String     @unique
+  user                      User  @relation(fields: [user_id],references: [id])
+}
+
+model Payout {
+  id                    String    @id @default(cuid())
+  amount                Int
+  createdAt             DateTime  @default(now())
+  note                  String    @db.Text
+  status                PayoutStatus 
+  bank_username         String
+  bank_type             String
+  bank_account_number   String
+  authorized_at         DateTime 
+  user_id               String 
+  user                  User            @relation(fields: [user_id],references: [id])
+}
+model PayoutInfo  {
+  id                    String    @id @default(cuid())
+  bank_username         String
+  bank_type             String
+  bank_account_number   String
+  user_id               String    
+  user                  User            @relation(fields: [user_id],references: [id])
+}
+enum PayoutStatus {
+  PENDING
+  SUCCESS
+}
