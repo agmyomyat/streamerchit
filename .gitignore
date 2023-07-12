@@ -8,7 +8,7 @@ node_modules
 # testing
 coverage
 #nest
-dist/
+dist
 # next.js
 .next/
 out/
