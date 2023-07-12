@@ -5,7 +5,7 @@ import { TrpcService } from '../trpc.service';
 import { DonationTrpcResolver } from '../../../donation/donation.trpc.resolver';
 import { ReportService } from '../../report/report.service';
 import { UserTrpcResolver } from '../../../user/user.trpc.resolver';
-import { AuthjsAdapterResolver } from '../../../auth/auth.trpc.resolver';
+import { AuthjsAdapterResolver } from '../../../auth/authjs-adapter.trpc.resolver';
 
 @Injectable()
 export class TrpcRouterMiddleware implements NestMiddleware {

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthjsAdapterResolver } from './auth.trpc.resolver';
+import { AuthService } from './authjs-adapter.service';
+import { AuthjsAdapterResolver } from './authjs-adapter.trpc.resolver';
 
 @Module({
   providers: [AuthService, AuthjsAdapterResolver],

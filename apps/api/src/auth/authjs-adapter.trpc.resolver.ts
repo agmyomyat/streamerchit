@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TrpcService } from '../lib/trpc/trpc.service';
 import { z } from 'zod';
-import { AuthService } from './auth.service';
+import { AuthService } from './authjs-adapter.service';
 
 @Injectable()
 export class AuthjsAdapterResolver {
