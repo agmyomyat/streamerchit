@@ -5,6 +5,7 @@ import { TrpcService } from '../trpc.service';
 import { DonationTrpcResolver } from '../../../donation/donation.trpc.resolver';
 import { ReportService } from '../../report/report.service';
 import { UserTrpcResolver } from '../../../user/user.trpc.resolver';
+import { AuthjsAdapterResolver } from '../../../auth/auth.trpc.resolver';
 
 @Injectable()
 export class TrpcRouterMiddleware implements NestMiddleware {
@@ -13,10 +14,27 @@ export class TrpcRouterMiddleware implements NestMiddleware {
     private trpcService: TrpcService,
     private donationResolver: DonationTrpcResolver,
     private report: ReportService,
-    private userResolver: UserTrpcResolver
+    private userResolver: UserTrpcResolver,
+    private authjsAdapter: AuthjsAdapterResolver
   ) {}
   private setUpAppRouter() {
     const router = this.trpcService.use.router;
+    const authjsAdapter = router({
+      createUser: this.authjsAdapter.createUser(),
+      getUser: this.authjsAdapter.getUser(),
+      getUserByEmail: this.authjsAdapter.getUserByEmail(),
+      getUserByAccount: this.authjsAdapter.getUserByAccount(),
+      updateUser: this.authjsAdapter.updateUser(),
+      deleteUser: this.authjsAdapter.deleteUser(),
+      linkAccount: this.authjsAdapter.linkAccount(),
+      unlinkAccount: this.authjsAdapter.unlinkAccount(),
+      createSession: this.authjsAdapter.createSession(),
+      getSessionAndUser: this.authjsAdapter.getSessionAndUser(),
+      updateSession: this.authjsAdapter.updateSession(),
+      deleteSession: this.authjsAdapter.deleteSession(),
+      createVerificationToken: this.authjsAdapter.createVerificationToken(),
+      useVerificationToken: this.authjsAdapter.useVerificationToken(),
+    });
     const donation = router({
       createTransaction: this.donationResolver.createDonationTrasaction(),
       transactionStatus: this.donationResolver.getDonationTransactionStatus(),
@@ -28,6 +46,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
     const _router = router({
       donation: donation,
       user: user,
+      authjsAdapter,
     });
     return _router;
   }

@@ -14,6 +14,7 @@ import { TrpcRouterMiddleware } from './lib/trpc/middleware/trpc-router.middlewa
 import { AxiomModule } from './lib/axiom/axiom.module';
 import { ReportModule } from './lib/report/report.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UserModule } from './user/user.module';
     AxiomModule,
     ReportModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
