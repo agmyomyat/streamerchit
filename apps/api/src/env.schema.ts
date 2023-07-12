@@ -13,5 +13,7 @@ export const ENV_SCHEMA = z.object({
   AXIOM_ORG_ID: z.string(),
   SHADOW_DATABASE_URL: z.string(),
   PAYMENT_JWT_SECRET: z.string(),
+  AUTH_ACCESS_TOKEN_SECRET: z.string(),
+  AUTHJS_ADAPTER_ACCESS_SECRET: z.string(),
 });
 export type ENV_VARS = z.infer<typeof ENV_SCHEMA>;

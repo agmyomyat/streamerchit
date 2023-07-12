@@ -7,6 +7,13 @@ import { AuthService } from './authjs-adapter.service';
 export class AuthjsAdapterResolver {
   constructor(private t: TrpcService, private authService: AuthService) {}
   private authorizedProcedure = this.t.use.procedure;
+  getUserWithAccessToken() {
+    return this.authorizedProcedure
+      .input(z.object({ email: z.string() }))
+      .query(async ({ input }) => {
+        return this.authService.getUserWithAccessToken(input.email);
+      });
+  }
   createUser() {
     return this.authorizedProcedure
       .input(z.any())

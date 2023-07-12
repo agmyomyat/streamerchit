@@ -1,13 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../lib/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
+import { JwtService } from '@nestjs/jwt';
+import { nanoid } from 'nanoid';
 type Provider_providerAccountId =
   Prisma.AccountFindUniqueArgs['where']['provider_providerAccountId'];
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private jwt: JwtService) {}
+  async getUserWithAccessToken(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    const at = this.jwt.sign({ email }, { expiresIn: '15m' });
+    return { user, sc_access_token: at };
+  }
   createUser(data: Prisma.UserCreateInput) {
-    return this.prisma.user.create({ data });
+    const page_handle = nanoid(10);
+    return this.prisma.user.create({
+      data: {
+        ...data,
+        Balance: { create: {} },
+        donation_setting: {
+          create: {
+            duration: 10,
+            font_color: '#00FF00',
+            font_size: '48px',
+            font_weight: 800,
+            message_font_color: '#FFFFFF',
+            message_font_weight: 700,
+            image_href: 'https://media.giphy.com/media/7kn27lnYSAE9O/giphy.gif',
+            sound_href:
+              'https://www.redringtones.com/wp-content/uploads/2019/02/wubba-lubba-dub-dub-ringtone.mp3',
+            message_font_size: '24px',
+          },
+        },
+        donation_page: {
+          create: { url_handle: page_handle, avatar_url: '', page_cover: '' },
+        },
+      },
+    });
   }
   getUser(id: string) {
     return this.prisma.user.findUnique({ where: { id } });

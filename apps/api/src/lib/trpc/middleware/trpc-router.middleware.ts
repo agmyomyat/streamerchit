@@ -20,6 +20,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
   private setUpAppRouter() {
     const router = this.trpcService.use.router;
     const authjsAdapter = router({
+      getUserWithAccessToken: this.authjsAdapter.getUserWithAccessToken(),
       createUser: this.authjsAdapter.createUser(),
       getUser: this.authjsAdapter.getUser(),
       getUserByEmail: this.authjsAdapter.getUserByEmail(),
