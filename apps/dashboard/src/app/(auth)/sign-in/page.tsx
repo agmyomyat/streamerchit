@@ -3,12 +3,29 @@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/utils';
-import { signIn, signOut } from 'next-auth/react';
-import React from 'react';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { OAUTH_CREATE_ACCOUNT_ERROR } from './sign-in.constants';
 export default function Page() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error === OAUTH_CREATE_ACCOUNT_ERROR) {
+      // settimeout to show in initial page load
+      setTimeout(() => {
+        toast({
+          title: 'Error',
+          description:
+            'You are not permitted to create an account get an invitation from our team first',
+          variant: 'destructive',
+          duration: 10000,
+        });
+      }, 500);
+    }
+  }, [searchParams]);
   const loginWithGoogle = async () => {
     setIsLoading(true);
 
@@ -30,7 +47,7 @@ export default function Page() {
       <Button
         type="button"
         size="sm"
-        className="w-full"
+        className=" w-96 max-w-full"
         onClick={loginWithGoogle}
         disabled={isLoading}
       >
