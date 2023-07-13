@@ -150,6 +150,10 @@ model PayoutInfo  {
   user_id               String    
   user                  User            @relation(fields: [user_id],references: [id])
 }
+model InviteToRegister {
+  id          String        @id    @default(cuid())
+  used_by      String?
+}
 enum PayoutStatus {
   PENDING
   SUCCESS
