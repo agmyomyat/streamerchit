@@ -16,9 +16,12 @@ export class AuthjsAdapterResolver {
   }
   createUser() {
     return this.authorizedProcedure
-      .input(z.any())
+      .input(z.object({ data: z.any(), invite_to_register_id: z.string() }))
       .mutation(async ({ input }) => {
-        return this.authService.createUser(input);
+        return this.authService.createUser(
+          input.data,
+          input.invite_to_register_id
+        );
       });
   }
 

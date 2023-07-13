@@ -3,6 +3,7 @@ import { PrismaService } from '../lib/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { nanoid } from 'nanoid';
+import { TRPCError } from '@trpc/server';
 type Provider_providerAccountId =
   Prisma.AccountFindUniqueArgs['where']['provider_providerAccountId'];
 @Injectable()
@@ -15,30 +16,51 @@ export class AuthService {
     const at = this.jwt.sign({ email }, { expiresIn: '15m' });
     return { user, sc_access_token: at };
   }
-  createUser(data: Prisma.UserCreateInput) {
+  createUser(data: Prisma.UserCreateInput, invite_to_register_id: string) {
     const page_handle = nanoid(10);
-    return this.prisma.user.create({
-      data: {
-        ...data,
-        Balance: { create: {} },
-        donation_setting: {
-          create: {
-            duration: 10,
-            font_color: '#00FF00',
-            font_size: '48px',
-            font_weight: 800,
-            message_font_color: '#FFFFFF',
-            message_font_weight: 700,
-            image_href: 'https://media.giphy.com/media/7kn27lnYSAE9O/giphy.gif',
-            sound_href:
-              'https://www.redringtones.com/wp-content/uploads/2019/02/wubba-lubba-dub-dub-ringtone.mp3',
-            message_font_size: '24px',
+    return this.prisma.$transaction(async (tx) => {
+      const inviteToRegister = await tx.inviteToRegister.findUniqueOrThrow({
+        where: { id: invite_to_register_id },
+      });
+      if (inviteToRegister.used_by) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          cause: 'invite code',
+          message: 'invite code already used',
+        });
+      }
+      const p1 = tx.inviteToRegister.update({
+        where: { id: invite_to_register_id },
+        data: {
+          used_by: data.email,
+        },
+      });
+      const p2 = tx.user.create({
+        data: {
+          ...data,
+          Balance: { create: {} },
+          donation_setting: {
+            create: {
+              duration: 10,
+              font_color: '#00FF00',
+              font_size: '48px',
+              font_weight: 800,
+              message_font_color: '#FFFFFF',
+              message_font_weight: 700,
+              image_href:
+                'https://media.giphy.com/media/7kn27lnYSAE9O/giphy.gif',
+              sound_href:
+                'https://www.redringtones.com/wp-content/uploads/2019/02/wubba-lubba-dub-dub-ringtone.mp3',
+              message_font_size: '24px',
+            },
+          },
+          donation_page: {
+            create: { url_handle: page_handle, avatar_url: '', page_cover: '' },
           },
         },
-        donation_page: {
-          create: { url_handle: page_handle, avatar_url: '', page_cover: '' },
-        },
-      },
+      });
+      const [user] = await Promise.all([p2, p1]);
+      return user;
     });
   }
   getUser(id: string) {
