@@ -1,10 +1,4 @@
-import {
-  DefaultSession,
-  NextAuthOptions,
-  Session,
-  TokenSet,
-  getServerSession,
-} from 'next-auth';
+import { NextAuthOptions, getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { adapter } from './adapter';
 import { client } from '../trpc';
@@ -25,8 +19,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async session({ token, session }) {
-      console.log(token);
-      console.log(session);
       if (token) {
         session.user.id = token.id;
         session.user.name = token.name;
@@ -36,7 +28,7 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
-    async jwt({ token, account, user }) {
+    async jwt({ token, user }) {
       if (!token || !token.email) return token;
       const data = await client.authjsAdapter.getUserWithAccessToken.query({
         email: token.email,
@@ -45,8 +37,6 @@ export const authOptions: NextAuthOptions = {
         token.id = user!.id;
         return token;
       }
-      console.log(token);
-      console.log(account);
       return {
         id: data.user.id,
         name: data.user.name,
@@ -54,9 +44,6 @@ export const authOptions: NextAuthOptions = {
         picture: data.user.image,
         access_token: data.sc_access_token,
       };
-    },
-    signIn: () => {
-      return false;
     },
     redirect() {
       return '/';

@@ -1,9 +1,15 @@
+import { cookies } from 'next/headers';
 import { client } from '../trpc';
 import { NextAuthOptions } from 'next-auth';
 
 export const adapter: NextAuthOptions['adapter'] = {
   createUser: async (user) => {
-    const res = await client.authjsAdapter.createUser.mutate(user);
+    const inviteKey = cookies().get('invite_key')?.value;
+    if (!inviteKey) throw new Error('no invite key found');
+    const res = await client.authjsAdapter.createUser.mutate({
+      data: user,
+      invite_to_register_id: inviteKey,
+    });
     return new Promise((r) => {
       r({
         email: res.email!,

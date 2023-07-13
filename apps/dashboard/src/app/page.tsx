@@ -12,7 +12,6 @@ export default function Home() {
   const session = use_SC_Session();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const { data } = trpcReact.donation.transactionStatus.useQuery({ id: 'hi' });
   useEffect(() => {
     console.log(session);
   }, [session]);
