@@ -123,6 +123,7 @@ model DonationSetting {
 }
 model DonationPage {
   id                        String  @id   @default(cuid())
+  display_name              String 
   page_cover                String?
   url_handle                String @unique
   avatar_url                String

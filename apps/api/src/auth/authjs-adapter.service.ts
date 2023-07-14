@@ -23,6 +23,7 @@ export class AuthjsAdapterService {
   }
   createUser(data: Prisma.UserCreateInput, invite_to_register_id: string) {
     const page_handle = nanoid(10);
+    const user_id = nanoid(20);
     return this.prisma.$transaction(async (tx) => {
       const inviteToRegister = await tx.inviteToRegister.findUniqueOrThrow({
         where: { id: invite_to_register_id },
@@ -43,6 +44,7 @@ export class AuthjsAdapterService {
       const p2 = tx.user.create({
         data: {
           ...data,
+          id: user_id,
           Balance: { create: {} },
           donation_setting: {
             create: {
@@ -57,22 +59,21 @@ export class AuthjsAdapterService {
               sound_href:
                 'https://www.redringtones.com/wp-content/uploads/2019/02/wubba-lubba-dub-dub-ringtone.mp3',
               message_font_size: '24px',
+              alertbox_listener_token:
+                this.alertboxService.generateJwtToken(user_id),
             },
           },
           donation_page: {
-            create: { url_handle: page_handle, avatar_url: '', page_cover: '' },
+            create: {
+              url_handle: page_handle,
+              avatar_url: data.image || '',
+              page_cover: '',
+              display_name: data.name || '',
+            },
           },
         },
       });
       const [user] = await Promise.all([p2, p1]);
-      await tx.donationSetting.update({
-        where: { id: user.id },
-        data: {
-          alertbox_listener_token: this.alertboxService.generateJwtToken(
-            user.id
-          ),
-        },
-      });
       return user;
     });
   }
