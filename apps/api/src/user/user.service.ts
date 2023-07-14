@@ -10,9 +10,8 @@ export class UserService {
   async getStreamerInfoForPublic({ page_handle }: GetStreamerInfoParams) {
     const donationPage = await this.prisma.donationPage.findUniqueOrThrow({
       where: { url_handle: page_handle },
-      include: { user: true },
     });
-    return { image: donationPage.user.image, name: donationPage.user.name };
+    return { image: donationPage.avatar_url, name: donationPage.display_name };
   }
   async getDonationSettings(user_id: string) {
     const settings = await this.prisma.donationSetting.findFirstOrThrow({
