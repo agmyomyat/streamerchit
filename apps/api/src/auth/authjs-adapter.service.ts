@@ -4,11 +4,16 @@ import { Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { nanoid } from 'nanoid';
 import { TRPCError } from '@trpc/server';
+import { AlertboxService } from '../alert-box/alert-box.service';
 type Provider_providerAccountId =
   Prisma.AccountFindUniqueArgs['where']['provider_providerAccountId'];
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private alertboxService: AlertboxService
+  ) {}
   async getUserWithAccessToken(email: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -60,6 +65,14 @@ export class AuthService {
         },
       });
       const [user] = await Promise.all([p2, p1]);
+      await tx.donationSetting.update({
+        where: { id: user.id },
+        data: {
+          alertbox_listener_token: this.alertboxService.generateJwtToken(
+            user.id
+          ),
+        },
+      });
       return user;
     });
   }

@@ -118,6 +118,7 @@ model DonationSetting {
   message_font_weight       Int 
   sound_href                String
   user_id                   String @unique
+  alertbox_listener_token    String?
   user                      User   @relation(fields: [user_id],references: [id])
 }
 model DonationPage {
