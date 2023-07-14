@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './authjs-adapter.service';
+import { AuthjsAdapterService } from './authjs-adapter.service';
 import { AuthjsAdapterResolver } from './authjs-adapter.trpc.resolver';
 import { JwtModule } from '@nestjs/jwt';
 import { AlertboxModule } from '../alert-box/alert-box.module';
+import { AuthService } from './auth.service';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { AlertboxModule } from '../alert-box/alert-box.module';
     }),
     AlertboxModule,
   ],
-  providers: [AuthService, AuthjsAdapterResolver],
-  exports: [AuthjsAdapterResolver],
+  providers: [AuthService, AuthjsAdapterService, AuthjsAdapterResolver],
+  exports: [AuthjsAdapterResolver, AuthService],
 })
 export class AuthModule {}

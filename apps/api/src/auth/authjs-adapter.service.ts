@@ -8,7 +8,7 @@ import { AlertboxService } from '../alert-box/alert-box.service';
 type Provider_providerAccountId =
   Prisma.AccountFindUniqueArgs['where']['provider_providerAccountId'];
 @Injectable()
-export class AuthService {
+export class AuthjsAdapterService {
   constructor(
     private prisma: PrismaService,
     private jwt: JwtService,

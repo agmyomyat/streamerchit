@@ -1,24 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { TrpcService } from '../lib/trpc/trpc.service';
 import { z } from 'zod';
-import { AuthService } from './authjs-adapter.service';
+import { AuthjsAdapterService } from './authjs-adapter.service';
 
 @Injectable()
 export class AuthjsAdapterResolver {
-  constructor(private t: TrpcService, private authService: AuthService) {}
+  constructor(
+    private t: TrpcService,
+    private authjsAdapterService: AuthjsAdapterService
+  ) {}
   private authorizedProcedure = this.t.use.procedure;
   getUserWithAccessToken() {
     return this.authorizedProcedure
       .input(z.object({ email: z.string() }))
       .query(async ({ input }) => {
-        return this.authService.getUserWithAccessToken(input.email);
+        return this.authjsAdapterService.getUserWithAccessToken(input.email);
       });
   }
   createUser() {
     return this.authorizedProcedure
       .input(z.object({ data: z.any(), invite_to_register_id: z.string() }))
       .mutation(async ({ input }) => {
-        return this.authService.createUser(
+        return this.authjsAdapterService.createUser(
           input.data,
           input.invite_to_register_id
         );
@@ -29,7 +32,7 @@ export class AuthjsAdapterResolver {
     return this.authorizedProcedure
       .input(z.object({ id: z.string() }))
       .query(async ({ input }) => {
-        return this.authService.getUser(input.id);
+        return this.authjsAdapterService.getUser(input.id);
       });
   }
 
@@ -37,26 +40,26 @@ export class AuthjsAdapterResolver {
     return this.authorizedProcedure
       .input(z.object({ email: z.string() }))
       .query(async ({ input }) => {
-        return this.authService.getUserByEmail(input.email);
+        return this.authjsAdapterService.getUserByEmail(input.email);
       });
   }
   getUserByAccount() {
     return this.authorizedProcedure.input(z.any()).query(async ({ input }) => {
-      return this.authService.getUserByAccount(input);
+      return this.authjsAdapterService.getUserByAccount(input);
     });
   }
   updateUser() {
     return this.authorizedProcedure
       .input(z.any())
       .mutation(async ({ input }) => {
-        return this.authService.updateUser(input);
+        return this.authjsAdapterService.updateUser(input);
       });
   }
   deleteUser() {
     return this.authorizedProcedure
       .input(z.object({ id: z.string() }))
       .mutation(async ({ input }) => {
-        return this.authService.deleteUser(input.id);
+        return this.authjsAdapterService.deleteUser(input.id);
       });
   }
 
@@ -64,7 +67,7 @@ export class AuthjsAdapterResolver {
     return this.authorizedProcedure
       .input(z.any())
       .mutation(async ({ input }) => {
-        return this.authService.linkAccount(input);
+        return this.authjsAdapterService.linkAccount(input);
       });
   }
 
@@ -72,7 +75,7 @@ export class AuthjsAdapterResolver {
     return this.authorizedProcedure
       .input(z.any())
       .mutation(async ({ input }) => {
-        return this.authService.unlinkAccount(input);
+        return this.authjsAdapterService.unlinkAccount(input);
       });
   }
 
@@ -80,7 +83,7 @@ export class AuthjsAdapterResolver {
     return this.authorizedProcedure
       .input(z.object({ sessionToken: z.string() }))
       .query(async ({ input }) => {
-        return this.authService.getSessionAndUser(input.sessionToken);
+        return this.authjsAdapterService.getSessionAndUser(input.sessionToken);
       });
   }
 
@@ -88,33 +91,33 @@ export class AuthjsAdapterResolver {
     return this.authorizedProcedure
       .input(z.any())
       .mutation(async ({ input }) => {
-        return this.authService.createSession(input);
+        return this.authjsAdapterService.createSession(input);
       });
   }
   updateSession() {
     return this.authorizedProcedure
       .input(z.any())
       .mutation(async ({ input }) => {
-        return this.authService.updateSession(input);
+        return this.authjsAdapterService.updateSession(input);
       });
   }
   deleteSession() {
     return this.authorizedProcedure
       .input(z.object({ sessionToken: z.string() }))
       .mutation(async ({ input }) => {
-        return this.authService.deleteSession(input.sessionToken);
+        return this.authjsAdapterService.deleteSession(input.sessionToken);
       });
   }
   createVerificationToken() {
     return this.authorizedProcedure
       .input(z.any())
       .mutation(async ({ input }) => {
-        return this.authService.createVerificationToken(input);
+        return this.authjsAdapterService.createVerificationToken(input);
       });
   }
   useVerificationToken() {
     return this.authorizedProcedure.input(z.any()).query(async ({ input }) => {
-      return this.authService.useVerificationToken(input);
+      return this.authjsAdapterService.useVerificationToken(input);
     });
   }
 }
