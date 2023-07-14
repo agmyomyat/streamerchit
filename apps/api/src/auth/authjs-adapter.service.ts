@@ -15,10 +15,10 @@ export class AuthjsAdapterService {
     private alertboxService: AlertboxService
   ) {}
   async getUserWithAccessToken(email: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUniqueOrThrow({
       where: { email },
     });
-    const at = this.jwt.sign({ email }, { expiresIn: '15m' });
+    const at = this.jwt.sign({ email, id: user.id }, { expiresIn: '15m' });
     return { user, sc_access_token: at };
   }
   createUser(data: Prisma.UserCreateInput, invite_to_register_id: string) {
