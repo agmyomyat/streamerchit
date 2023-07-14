@@ -13,11 +13,12 @@ export class UserService {
     });
     return { image: donationPage.avatar_url, name: donationPage.display_name };
   }
-  async getDonationSettings(user_id: string) {
+  async getDonationSettings(userId: string) {
     const settings = await this.prisma.donationSetting.findFirstOrThrow({
-      where: { user_id },
+      where: { user_id: userId },
     });
-    return settings;
+    const { id, user_id, ...rest } = settings;
+    return rest;
   }
   async updateDonationSettings(
     user_id: string,
