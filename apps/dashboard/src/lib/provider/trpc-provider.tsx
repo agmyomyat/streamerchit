@@ -8,7 +8,18 @@ import { isExpired } from 'react-jwt';
 import { getSession } from 'next-auth/react';
 
 export function TrpcProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: 3,
+            cacheTime: 1000 * 10,
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
   const [trpcClient] = useState(() =>
     trpcReact.createClient({
       links: [
@@ -17,11 +28,13 @@ export function TrpcProvider({ children }: { children: React.ReactNode }) {
           // You can pass any HTTP headers you wish here
           headers: async () => {
             const token = getSCAccessToken();
-            console.log(token);
             if (!token) return {};
             if (isExpired(token)) {
               const data = await getSession();
-              if (!data?.user.access_token) return {};
+              if (!data?.user.access_token) {
+                storeSCAccessToken('');
+                return {};
+              }
               storeSCAccessToken(data.user.access_token);
               return {
                 Authorization: `${data.user.access_token}`,

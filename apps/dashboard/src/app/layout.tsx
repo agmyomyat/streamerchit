@@ -1,7 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { TrpcProvider } from '../lib/provider/trpc-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { Providers } from '@/lib/provider';
 import { NavBar } from '@/components/nav';

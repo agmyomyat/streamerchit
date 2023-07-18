@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-import { UseFormReturn } from 'react-hook-form';
-import { z } from 'zod';
 import { TipePageProvider } from './providers/tip-page-provider';
 import { client } from '@/lib/trpc';
 export const revalidate = 0;
