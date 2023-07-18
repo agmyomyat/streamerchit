@@ -5,7 +5,7 @@ import { PaymentModule } from '../payment/payment.module';
 
 @Module({
   imports: [PaymentModule],
-  exports: [DonationTrpcResolver],
+  exports: [DonationTrpcResolver, DonationService],
   providers: [DonationService, DonationTrpcResolver],
 })
 export class DonationModule {}

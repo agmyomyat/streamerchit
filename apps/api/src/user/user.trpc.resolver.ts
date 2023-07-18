@@ -7,10 +7,12 @@ import {
 import { UserService } from './user.service';
 import { UserTrpcMiddleware } from './user.trpc.middleware';
 import { z } from 'zod';
+import { DonationService } from '../donation/donation.service';
 @Injectable()
 export class UserTrpcResolver {
   constructor(
     private userService: UserService,
+    private donationService: DonationService,
     private trpc: TrpcService,
     private trpcMiddleware: UserTrpcMiddleware
   ) {}
@@ -29,7 +31,7 @@ export class UserTrpcResolver {
   }
   getDonationSettings() {
     return this.protectedProcedure.query(async ({ ctx }) => {
-      const settings = await this.userService.getDonationSettings(ctx.id);
+      const settings = await this.donationService.getDonationSettings(ctx.id);
       return settings;
     });
   }
@@ -37,7 +39,7 @@ export class UserTrpcResolver {
     return this.protectedProcedure
       .input(UpdateDonationSettingsInputZod)
       .mutation(async ({ ctx, input }) => {
-        const settings = await this.userService.updateDonationSettings(
+        const settings = await this.donationService.updateDonationSettings(
           ctx.id,
           input
         );

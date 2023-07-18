@@ -5,6 +5,7 @@ import { ENV_VARS } from '../env.schema';
 import { DingerService } from '../lib/dinger/dinger.service';
 import { PrismaService } from '../lib/prisma/prisma.service';
 import { PaymentService } from '../payment/payment.service';
+import { Prisma } from '@prisma/client';
 interface CreateDonationTransactionParams {
   paymentSessionToken: string;
   donarPhone?: string;
@@ -25,6 +26,24 @@ export class DonationService {
     private prisma: PrismaService,
     private paymentService: PaymentService
   ) {}
+
+  async getDonationSettings(userId: string) {
+    const settings = await this.prisma.donationSetting.findFirstOrThrow({
+      where: { user_id: userId },
+    });
+    const { id, user_id, ...rest } = settings;
+    return rest;
+  }
+  async updateDonationSettings(
+    user_id: string,
+    data: Prisma.DonationSettingUpdateInput
+  ) {
+    await this.prisma.donationSetting.update({
+      where: { user_id },
+      data,
+    });
+    return { update: true };
+  }
   async getStreamer(params: GetStreamerNameParams) {
     const donationPage = await this.prisma.donationPage.findFirstOrThrow({
       where: { url_handle: params.page_handle },
