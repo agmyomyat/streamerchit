@@ -16,7 +16,7 @@ export default observer(function Page() {
     return `${backend_url}/v1/alertbox/sse/donation/${user_id}`;
   }, [session.data?.user?.id]);
   const { eventData } = useEventSource(serverEventUrl);
-  // tipinfoCard rerender if card is still new or not
+  // force  rerender every 10 seconds to check tipinfoCard is still new or not
   useEffect(() => {
     const interval = setInterval(() => {
       setForceUpdateKey((prev) => prev + 1);
