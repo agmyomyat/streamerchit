@@ -1,4 +1,8 @@
-import { useObservable } from '@legendapp/state/react';
+import {
+  enableLegendStateReact,
+  useObservable,
+  useSelector,
+} from '@legendapp/state/react';
 import { useEffect, useState } from 'react';
 
 interface DonationEventData {
@@ -8,7 +12,8 @@ interface DonationEventData {
   date: Date;
 }
 export function useEventSource(url: string | null) {
-  const eventData = useObservable<DonationEventData[]>([]);
+  const eventData$ = useObservable<DonationEventData[]>([]);
+  const eventData = useSelector(() => eventData$.get());
   useEffect(() => {
     let eventSource: EventSource | null = null;
     if (eventSource) return;
@@ -16,7 +21,7 @@ export function useEventSource(url: string | null) {
     eventSource = new EventSource(`${url}`);
     eventSource.onmessage = ({ data }) => {
       const donationData: DonationEventData = JSON.parse(data);
-      eventData.unshift({ ...donationData, date: new Date() });
+      eventData$.unshift({ ...donationData, date: new Date() });
     };
     return () => {
       eventSource?.close();

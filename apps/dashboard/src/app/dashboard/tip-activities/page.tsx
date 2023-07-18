@@ -6,7 +6,7 @@ import { useEventSource } from '@/hooks/use-event-source';
 import { useSession } from 'next-auth/react';
 import { observer } from '@legendapp/state/react';
 
-export default observer(function Page() {
+export default function Page() {
   const session = useSession();
   const [forceUpdateKey, setForceUpdateKey] = useState(0);
   const serverEventUrl = useMemo(() => {
@@ -31,7 +31,7 @@ export default observer(function Page() {
     );
   return (
     <div key={forceUpdateKey} className="w-full flex flex-col gap-5">
-      {eventData.get()?.map((item, idx) => {
+      {eventData.map((item, idx) => {
         return (
           <div key={idx}>
             <TipInfoCard
@@ -45,7 +45,7 @@ export default observer(function Page() {
       })}
     </div>
   );
-});
+};
 //testing purpose
 //   const [tipInfoCards, setTipInfoCards] = useState<
 //     {
