@@ -18,6 +18,12 @@ interface GetPaymentProviderParams {
   name: string;
   method: string;
 }
+interface GetDonationHistoryQuery {
+  query: {
+    take?: number;
+    skip?: number;
+  };
+}
 @Injectable()
 export class DonationService {
   constructor(
@@ -33,6 +39,18 @@ export class DonationService {
     });
     const { id, user_id, ...rest } = settings;
     return rest;
+  }
+  async getDonationHistory(
+    user_id: string,
+    { query: { take = 15, skip = 0 } }: GetDonationHistoryQuery
+  ) {
+    return this.prisma.donation.findMany({
+      where: { user_id },
+      orderBy: { created_at: 'desc' },
+      take: take,
+      skip: skip,
+      include: { payment_transaction: true },
+    });
   }
   async updateDonationSettings(
     user_id: string,

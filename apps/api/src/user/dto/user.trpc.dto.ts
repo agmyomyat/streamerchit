@@ -15,3 +15,9 @@ export const UpdateDonationSettingsInputZod = z.object({
   sound_href: z.string(),
   alertbox_listener_token: z.string().optional(),
 });
+export const GetDonationHistoryInputZod = z.object({
+  query: z.object({
+    take: z.number().int().optional(),
+    skip: z.number().int().optional(),
+  }),
+});

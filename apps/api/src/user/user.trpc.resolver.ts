@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TrpcService } from '../lib/trpc/trpc.service';
 import {
+  GetDonationHistoryInputZod,
   GetStreamerInfoInputZod,
   UpdateDonationSettingsInputZod,
 } from './dto/user.trpc.dto';
@@ -26,6 +27,15 @@ export class UserTrpcResolver {
       .query(async ({ input }) => {
         return await this.userService.getStreamerInfoForPublic({
           page_handle: input.page_handle,
+        });
+      });
+  }
+  getDonationHistory() {
+    return this.protectedProcedure
+      .input(GetDonationHistoryInputZod)
+      .query(async ({ input, ctx }) => {
+        return this.donationService.getDonationHistory(ctx.id, {
+          query: { skip: input.query.skip, take: input.query.take },
         });
       });
   }
