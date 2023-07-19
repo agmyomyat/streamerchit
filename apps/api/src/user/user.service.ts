@@ -17,7 +17,8 @@ export class UserService {
     const tipPage = await this.prisma.donationPage.findUniqueOrThrow({
       where: { user_id },
     });
-    return tipPage;
+    const { id, user_id: _user_id, ...rest } = tipPage;
+    return rest;
   }
   async updateTipPageSettings(
     user_id: string,
@@ -27,6 +28,7 @@ export class UserService {
       where: { user_id },
       data,
     });
-    return updatedTipPage;
+    const { id, user_id: _user_id, ...rest } = updatedTipPage;
+    return rest;
   }
 }
