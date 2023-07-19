@@ -29,13 +29,13 @@ export default function TipHistoryPage() {
     }
     GlobalLoader.set(false);
   }, [loadingHistory, fetchingHistory]);
-  if (!data || !data?.length) {
-    return (
-      <div className="flex w-full justify-center">
-        <h1>No History Yet</h1>
-      </div>
-    );
-  }
+  // if (!data || !data?.length) {
+  //   return (
+  //     <div className="flex w-full justify-center">
+  //       <h1>No History Yet</h1>
+  //     </div>
+  //   );
+  // }
   return (
     <div className="flex flex-col w-full">
       <TipHistoryTable data={data} />
