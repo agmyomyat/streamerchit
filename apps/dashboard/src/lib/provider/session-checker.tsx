@@ -23,7 +23,7 @@ export function SC_SessionProvider({
     return () => {
       GlobalLoader.set(false);
     };
-  }, [session]);
+  }, [session, pathname]);
   useEffect(() => {
     if (session.data?.user.access_token) {
       storeSCAccessToken(session.data.user.access_token);
