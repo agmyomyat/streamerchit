@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { SettingsSection } from './templates/settings-section';
 import { useEffect } from 'react';
 import { GlobalLoader } from '@/global-stores/global-loading';
+import { use_SC_Session } from '@/lib/provider/session-checker';
 function testDonation(token?: string | null) {
   if (!token) throw new Error('No token provided');
   return fetch('http://localhost:3333/v1/alertbox/test', {
@@ -30,13 +31,16 @@ const SettingFormDataZod = z.object({
 });
 export type SettingFormData = z.infer<typeof SettingFormDataZod>;
 export default function Page() {
+  const { status } = use_SC_Session();
   const {
     data,
     refetch,
     error,
     isFetching: fetchingSettings,
     isLoading: loadingSettings,
-  } = trpcReact.user.getDonationSettings.useQuery();
+  } = trpcReact.user.getDonationSettings.useQuery(undefined, {
+    enabled: status === 'authenticated',
+  });
   const form = useForm<SettingFormData>();
   const { mutate, isLoading: updatingSetting } =
     trpcReact.user.updateDonationSettings.useMutation();

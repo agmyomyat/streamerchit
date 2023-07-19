@@ -11,6 +11,7 @@ import copy from 'copy-to-clipboard';
 import { TipPageForm } from './templates/tip-page-form';
 import { TipPageAvatarSection } from './templates/avatar-section';
 import { Button } from '@/components/ui/button';
+import { use_SC_Session } from '@/lib/provider/session-checker';
 const TipPageSettingsFormDataZod = z.object({
   memo: z.string().nullable(),
   display_name: z.string(),
@@ -22,13 +23,16 @@ export type TipPageSettingsFormData = z.infer<
   typeof TipPageSettingsFormDataZod
 >;
 export default function TipPagePage() {
+  const { status } = use_SC_Session();
   const {
     data,
     isLoading: loadingTipPage,
     isFetching: fetchingTipPage,
     error,
     refetch,
-  } = trpcReact.user.getTipPageSettings.useQuery();
+  } = trpcReact.user.getTipPageSettings.useQuery(undefined, {
+    enabled: status === 'authenticated',
+  });
   const { mutate, isLoading: updatingTipPage } =
     trpcReact.user.updatetipPageSettings.useMutation();
   const { toast } = useToast();

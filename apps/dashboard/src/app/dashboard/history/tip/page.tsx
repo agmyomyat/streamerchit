@@ -5,18 +5,23 @@ import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { GlobalLoader } from '@/global-stores/global-loading';
 import { useToast } from '@/components/ui/use-toast';
+import { use_SC_Session } from '@/lib/provider/session-checker';
 
 export default function TipHistoryPage() {
   const [page, setPage] = useState(1);
   const { toast } = useToast();
+  const { status } = use_SC_Session();
   const {
     data,
     error,
     isLoading: loadingHistory,
     isFetching: fetchingHistory,
-  } = trpcReact.user.getDonationHistory.useQuery({
-    query: { skip: page === 1 ? 0 : page * 10, take: 10 },
-  });
+  } = trpcReact.user.getDonationHistory.useQuery(
+    {
+      query: { skip: page === 1 ? 0 : page * 10, take: 10 },
+    },
+    { enabled: status === 'authenticated' }
+  );
   useEffect(() => {
     if (error) {
       toast({ title: 'Error occured try refreshing the page' });

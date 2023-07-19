@@ -15,15 +15,25 @@ export function SC_SessionProvider({
   const router = useRouter();
   const session = useSession();
   const pathname = usePathname();
-  useEffect(() => {
-    if (session.status === 'unauthenticated') {
-      if (pathname.includes('/sign-in')) return;
-      router.replace('/sign-in');
-    }
-    return () => {
-      GlobalLoader.set(false);
-    };
-  }, [session, pathname]);
+useEffect(() => {
+  if (session.status === 'loading') {
+    GlobalLoader.set(true);
+    return;
+  }
+  GlobalLoader.set(false);
+  return () => {
+    GlobalLoader.set(false);
+  };
+}, [session]);
+useEffect(() => {
+  if (session.status === 'unauthenticated') {
+    if (pathname.includes('/sign-in')) return;
+    router.replace('/sign-in');
+  }
+  return () => {
+    GlobalLoader.set(false);
+  };
+}, [session, pathname]);
   useEffect(() => {
     if (session.data?.user.access_token) {
       storeSCAccessToken(session.data.user.access_token);
