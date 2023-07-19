@@ -6,6 +6,7 @@ import {
   CircleDollarSign,
   User2,
   History,
+  Shirt,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -75,6 +76,20 @@ export function SidebarContent({ className, routePath }: SidebarContentProps) {
               >
                 <User2 className="mr-2 w-4 h-4" />
                 Account
+              </Button>
+            </Link>
+            <Link href="#">
+              <Button
+                disabled
+                variant={'ghost'}
+                className="w-full justify-start"
+              >
+                <Shirt className="mr-2 w-4 h-4" />
+
+                <span className="text-center">
+                  Merch Store <br />
+                  coming soon
+                </span>
               </Button>
             </Link>
           </div>
