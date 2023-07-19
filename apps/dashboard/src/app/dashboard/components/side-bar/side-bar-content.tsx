@@ -78,18 +78,10 @@ export function SidebarContent({ className, routePath }: SidebarContentProps) {
                 Account
               </Button>
             </Link>
-            <Link href="#">
-              <Button
-                disabled
-                variant={'ghost'}
-                className="w-full justify-start"
-              >
+            <Link href="/dashboard/merchstore">
+              <Button variant={'ghost'} className="w-full justify-start">
                 <Shirt className="mr-2 w-4 h-4" />
-
-                <span className="text-center">
-                  Merch Store <br />
-                  coming soon
-                </span>
+                Merch Store
               </Button>
             </Link>
           </div>
