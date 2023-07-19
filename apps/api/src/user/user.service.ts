@@ -13,4 +13,20 @@ export class UserService {
     });
     return { image: donationPage.avatar_url, name: donationPage.display_name };
   }
+  async getTipPageSettings(user_id: string) {
+    const tipPage = await this.prisma.donationPage.findUniqueOrThrow({
+      where: { user_id },
+    });
+    return tipPage;
+  }
+  async updateTipPageSettings(
+    user_id: string,
+    data: Omit<Prisma.DonationPageUpdateInput, 'user_id' | 'id' | 'user'>
+  ) {
+    const updatedTipPage = await this.prisma.donationPage.update({
+      where: { user_id },
+      data,
+    });
+    return updatedTipPage;
+  }
 }

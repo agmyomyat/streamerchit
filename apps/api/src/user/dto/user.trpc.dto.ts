@@ -21,3 +21,8 @@ export const GetDonationHistoryInputZod = z.object({
     skip: z.number().int().optional(),
   }),
 });
+export const UpdateTipPageSettingsInputZod = z.object({
+  display_name: z.string(),
+  url_handle: z.string(),
+  avatar_url: z.string(),
+});

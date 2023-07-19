@@ -4,6 +4,7 @@ import {
   GetDonationHistoryInputZod,
   GetStreamerInfoInputZod,
   UpdateDonationSettingsInputZod,
+  UpdateTipPageSettingsInputZod,
 } from './dto/user.trpc.dto';
 import { UserService } from './user.service';
 import { UserTrpcMiddleware } from './user.trpc.middleware';
@@ -44,6 +45,19 @@ export class UserTrpcResolver {
       const settings = await this.donationService.getDonationSettings(ctx.id);
       return settings;
     });
+  }
+  getTipPageSettings() {
+    return this.protectedProcedure.query(async ({ ctx }) => {
+      const tipPageSettings = await this.userService.getTipPageSettings(ctx.id);
+      return tipPageSettings;
+    });
+  }
+  updateTipPageSetttings() {
+    return this.protectedProcedure
+      .input(UpdateTipPageSettingsInputZod)
+      .mutation(async ({ ctx, input }) => {
+        return this.userService.updateTipPageSettings(ctx.id, input);
+      });
   }
   updateDonationSettings() {
     return this.protectedProcedure
