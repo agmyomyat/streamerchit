@@ -15,7 +15,7 @@ export function TipInfoCard({
 }: TipInfoCardProps) {
   const isOld = isDateOlderThan(date, 1 * 1000 * 60);
   return (
-    <Card className="max-w-[1200px] w-full">
+    <Card className="relative">
       <CardHeader>
         <CardTitle className="flex justify-between">
           <div>

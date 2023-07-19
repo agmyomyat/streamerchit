@@ -5,6 +5,12 @@ import { useState, useEffect, useMemo } from 'react';
 import { useEventSource } from '@/hooks/use-event-source';
 import { useSession } from 'next-auth/react';
 import { observer } from '@legendapp/state/react';
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 
 export default function Page() {
   const session = useSession();
@@ -23,27 +29,36 @@ export default function Page() {
     }, 10000);
     return () => clearInterval(interval);
   }, []);
-  if (!eventData?.length)
-    return (
-      <div className="w-full flex justify-center">
-        <h1>Waiting for new donation....</h1>
-      </div>
-    );
   return (
-    <div key={forceUpdateKey} className="w-full flex flex-col gap-5">
-      {eventData.map((item, idx) => {
-        return (
-          <div key={idx}>
-            <TipInfoCard
-              amount={item.amount}
-              doner={item.name}
-              date={item.date}
-              message={item.message}
-            />
+    <Card
+      key={forceUpdateKey}
+      className="w-full flex flex-col gap-5 min-h-[700px] h-full"
+    >
+      <CardHeader>
+        <CardTitle>Tip Activities</CardTitle>
+        <CardDescription>Capture live donation here</CardDescription>
+      </CardHeader>
+      <div className="flex flex-col items-center mx-10">
+        {!eventData?.length ? (
+          <div className="w-full flex justify-center">
+            <h1>Waiting for new donation....</h1>
           </div>
-        );
-      })}
-    </div>
+        ) : (
+          eventData.map((item, idx) => {
+            return (
+              <div key={idx} className="w-full ">
+                <TipInfoCard
+                  amount={item.amount}
+                  doner={item.name}
+                  date={item.date}
+                  message={item.message}
+                />
+              </div>
+            );
+          })
+        )}
+      </div>
+    </Card>
   );
 };
 //testing purpose
