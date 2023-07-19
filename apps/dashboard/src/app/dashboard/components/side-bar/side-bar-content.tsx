@@ -58,10 +58,10 @@ export function SidebarContent({ className, routePath }: SidebarContentProps) {
                 Payout
               </Button>
             </Link>
-            <Link href="/dashboard/tip-history">
+            <Link href="/dashboard/history/tip">
               <Button
                 variant={
-                  routePath.includes('tip-history') ? 'secondary' : 'ghost'
+                  routePath.includes('history/tip') ? 'secondary' : 'ghost'
                 }
                 className="w-full justify-start"
               >
