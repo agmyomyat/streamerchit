@@ -10,12 +10,13 @@ const inter = Inter({ subsets: ['latin'] });
 import { Pacifico } from 'next/font/google';
 import { cn } from '@/utils';
 const pacifico = Pacifico({ subsets: ['latin'], weight: '400' });
-export const metadata: Metadata = {
-  title: 'streamer achit',
-  description: 'streamer achit',
-};
+export const revalidate = 0;
 
-export default function RootLayout({
+export const metadata: Metadata = {
+  title: 'StreamerChit',
+  description: 'Donation Alert Platform in Myanmar',
+};
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;

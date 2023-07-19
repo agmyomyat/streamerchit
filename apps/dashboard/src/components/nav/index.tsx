@@ -3,10 +3,10 @@ import { cn } from '@/utils';
 import { Heart } from 'lucide-react';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-import { use_SC_Session } from '@/hooks/use-custom-session';
 import { usePathname } from 'next/navigation';
+import { use_SC_Session } from '@/lib/provider/session-checker';
 export function NavBar() {
-  const { data } = use_SC_Session();
+  const session = use_SC_Session();
   const path = usePathname();
   return (
     <div className={'w-full h-16 flex items-center shadow-sm shadow-gray-600'}>
@@ -20,7 +20,7 @@ export function NavBar() {
             <div className="text-[0.625rem] text-blue-300 self-end">BETA</div>
           </div>
         </Link>
-        {data?.user ? (
+        {session?.data?.user ? (
           <div className={cn({ hidden: path.includes('dashboard') })}>
             <Link href={'/dashboard/alertbox'} passHref>
               <Button>Dashboard</Button>

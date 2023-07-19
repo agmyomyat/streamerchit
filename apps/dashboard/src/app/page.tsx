@@ -1,10 +1,8 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { use_SC_Session } from '@/hooks/use-custom-session';
 import { scSignOut } from '@/lib/auth/sc-sign-out';
-import { trpcReact } from '@/lib/trpc/trpc-react';
-import { getSession, signOut, useSession } from 'next-auth/react';
+import { use_SC_Session } from '@/lib/provider/session-checker';
 import React from 'react';
 import { useEffect } from 'react';
 
