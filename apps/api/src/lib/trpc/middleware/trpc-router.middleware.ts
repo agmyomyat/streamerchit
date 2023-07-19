@@ -48,6 +48,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
       getDonations: this.userResolver.getDonationHistory(),
       getTipPageSettings: this.userResolver.getTipPageSettings(),
       updatetipPageSettings: this.userResolver.updateTipPageSetttings(),
+      getDonationHistory: this.userResolver.getDonationHistory(),
     });
     const _router = router({
       donation: donation,
