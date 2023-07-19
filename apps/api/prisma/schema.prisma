@@ -122,13 +122,14 @@ model DonationSetting {
   user                      User   @relation(fields: [user_id],references: [id])
 }
 model DonationPage {
-  id                        String  @id   @default(cuid())
+  id                        String    @id   @default(cuid())
   display_name              String 
   page_cover                String?
-  url_handle                String @unique
+  memo                      String?   @db.Text
+  url_handle                String    @unique
   avatar_url                String
-  user_id                   String     @unique
-  user                      User  @relation(fields: [user_id],references: [id])
+  user_id                   String    @unique
+  user                      User      @relation(fields: [user_id],references: [id])
 }
 
 model Payout {
