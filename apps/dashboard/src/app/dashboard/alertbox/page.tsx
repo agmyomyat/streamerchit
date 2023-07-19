@@ -59,7 +59,7 @@ export default function Page() {
         variant: 'destructive',
       });
     }
-  }, []);
+  }, [error]);
   useEffect(() => {
     form.reset(data);
   }, [data]);
