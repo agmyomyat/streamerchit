@@ -27,7 +27,8 @@ useEffect(() => {
 }, [session]);
 useEffect(() => {
   if (session.status === 'unauthenticated') {
-    if (pathname.includes('/sign-in')) return;
+    if (!pathname.includes('dashboard') && pathname.includes('/sign-in'))
+      return;
     router.replace('/sign-in');
   }
   return () => {
