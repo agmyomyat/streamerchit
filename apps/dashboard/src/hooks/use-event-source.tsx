@@ -5,14 +5,8 @@ import {
 } from '@legendapp/state/react';
 import { useEffect, useState } from 'react';
 
-interface DonationEventData {
-  name: string;
-  message: string;
-  amount: number;
-  date: Date;
-}
-export function useEventSource(url: string | null) {
-  const eventData$ = useObservable<DonationEventData[]>([]);
+export function useEventSource<T extends any[]>(url: string | null) {
+  const eventData$ = useObservable<any>([]);
   const eventData = useSelector(() => eventData$.get());
   useEffect(() => {
     let eventSource: EventSource | null = null;
@@ -20,7 +14,7 @@ export function useEventSource(url: string | null) {
     if (!url) return;
     eventSource = new EventSource(`${url}`);
     eventSource.onmessage = ({ data }) => {
-      const donationData: DonationEventData = JSON.parse(data);
+      const donationData: T = JSON.parse(data);
       eventData$.unshift({ ...donationData, date: new Date() });
     };
     return () => {
@@ -28,5 +22,5 @@ export function useEventSource(url: string | null) {
       eventSource = null;
     };
   }, [url]);
-  return { eventData };
+  return { eventData } as { eventData: T };
 }

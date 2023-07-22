@@ -12,6 +12,12 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
+interface DonationEventData {
+  name: string;
+  message: string;
+  amount: number;
+  date: Date;
+}
 export default function Page() {
   const session = useSession();
   const [forceUpdateKey, setForceUpdateKey] = useState(0);
@@ -21,7 +27,7 @@ export default function Page() {
     if (!user_id || !backend_url) return null;
     return `${backend_url}/v1/alertbox/sse/donation/${user_id}`;
   }, [session.data?.user?.id]);
-  const { eventData } = useEventSource(serverEventUrl);
+  const { eventData } = useEventSource<DonationEventData[]>(serverEventUrl);
   // force  rerender every 10 seconds to check tipinfoCard is still new or not
   useEffect(() => {
     const interval = setInterval(() => {
