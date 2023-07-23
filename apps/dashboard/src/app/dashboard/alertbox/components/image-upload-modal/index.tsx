@@ -2,7 +2,7 @@ import FileUploadField from '@/components/file-upload-field';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { ArrowRightLeft, Link, Upload } from 'lucide-react';
+import { Link, UploadCloud } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { MediaInputUrlModal } from '../media-input-url-modal';
@@ -30,7 +30,7 @@ export function ImageUploadModal({
         <div className="flex">
           <DialogTrigger asChild>
             <Button variant="ghost" onClick={() => setOpen(true)}>
-              <Upload />
+              <UploadCloud />
             </Button>
           </DialogTrigger>
           <MediaInputUrlModal

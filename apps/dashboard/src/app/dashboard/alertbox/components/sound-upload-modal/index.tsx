@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
-import { Link, Music, Play, Upload } from 'lucide-react';
+import { Link, Music, Play, UploadCloud } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { MediaInputUrlModal } from '../media-input-url-modal';
 export function SoundUploadModal({
@@ -37,7 +37,7 @@ export function SoundUploadModal({
           </Button>
           <DialogTrigger asChild>
             <Button variant="ghost" onClick={() => setOpen(true)}>
-              <Upload />
+              <UploadCloud />
             </Button>
           </DialogTrigger>
           <MediaInputUrlModal
