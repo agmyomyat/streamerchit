@@ -4,6 +4,7 @@ import {
   CreatePayoutInputZod,
   GetDonationHistoryInputZod,
   GetStreamerInfoInputZod,
+  ListPayoutHistoryInputZod,
   UpdateDonationSettingsInputZod,
   UpdateTipPageSettingsInputZod,
 } from './dto/user.trpc.dto';
@@ -105,6 +106,15 @@ export class UserTrpcResolver {
           });
         }
         return this.payoutService.createPayout(ctx.id, input);
+      });
+  }
+  listPayoutHistory() {
+    return this.protectedProcedure
+      .input(ListPayoutHistoryInputZod)
+      .query(async ({ ctx, input }) => {
+        return this.payoutService.listPayoutHistory(ctx.id, {
+          query: { take: input.query.take, skip: input.query.skip },
+        });
       });
   }
 }

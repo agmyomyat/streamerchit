@@ -43,6 +43,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
     });
     const payout = router({
       create: this.userResolver.createPayout(),
+      list: this.userResolver.listPayoutHistory(),
     });
     const user = router({
       info: this.userResolver.queryStreamerInfo(),

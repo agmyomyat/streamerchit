@@ -34,3 +34,9 @@ export const CreatePayoutInputZod = z.object({
   bank_username: z.string(),
   note: z.string(),
 });
+export const ListPayoutHistoryInputZod = z.object({
+  query: z.object({
+    take: z.number().int().optional(),
+    skip: z.number().int().optional(),
+  }),
+});
