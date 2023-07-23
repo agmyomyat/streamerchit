@@ -34,9 +34,9 @@ export function ImageUploadModal({
             </Button>
           </DialogTrigger>
           <MediaInputUrlModal
-            description="Insert Sound Url"
+            description="Insert Image or Gif Link "
             old_url={image_url}
-            title="Sound"
+            title="Image"
             onSumit={onSubmitImageUrl}
           >
             <Button variant="ghost">
@@ -51,8 +51,8 @@ export function ImageUploadModal({
           filetypes={['image/png', 'image/jpeg', 'image/gif']}
           text={
             <div className="text-center">
-              Drag and drop an image here, or click to select a file with up to
-              5Mb
+              Drag and drop an image or gif here, or click to select a file with
+              up to 5Mb
             </div>
           }
           onFileChosen={(files) => {
