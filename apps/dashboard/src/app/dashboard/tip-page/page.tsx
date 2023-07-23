@@ -4,7 +4,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { GlobalLoader } from '@/global-stores/global-loading';
 import { trpcReact } from '@/lib/trpc/trpc-react';
 import { generateTipPageUrl } from '@/utils/generate-tip-page-url';
-import { use, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import copy from 'copy-to-clipboard';
@@ -12,6 +12,9 @@ import { TipPageForm } from './templates/tip-page-form';
 import { TipPageAvatarSection } from './templates/avatar-section';
 import { Button } from '@/components/ui/button';
 import { use_SC_Session } from '@/lib/provider/session-checker';
+import { AvatarUploadModal } from './components/avatar-upload-modal';
+import { uploadAvatar } from './tip-page.request';
+import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
 const TipPageSettingsFormDataZod = z.object({
   memo: z.string().nullable(),
   display_name: z.string(),
@@ -35,6 +38,8 @@ export default function TipPagePage() {
   });
   const { mutate, isLoading: updatingTipPage } =
     trpcReact.user.updatetipPageSettings.useMutation();
+  const { mutate: deleteFileMutate } =
+    trpcReact.user.fileLibrary.deleteFileFromLibrary.useMutation();
   const { toast } = useToast();
   const form = useForm<TipPageSettingsFormData>({
     defaultValues: {
@@ -45,6 +50,46 @@ export default function TipPagePage() {
       url_handle: '',
     },
   });
+  const onFileChosen = async (file: File[]) => {
+    GlobalLoader.set(true);
+    let uploadedAvatar: { key: string; url: string };
+
+    const oldAvatarUrl = form.getValues().avatar_url;
+    const file_id = extractFileKeyAndExtFromUrl(oldAvatarUrl);
+    if (file_id) {
+      deleteFileMutate({ file_id });
+    }
+    try {
+      uploadedAvatar = await uploadAvatar(file);
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: 'something went wrong try again',
+        variant: 'destructive',
+      });
+    } finally {
+      GlobalLoader.set(false);
+    }
+    form.handleSubmit((data) => {
+      mutate(
+        { ...data, avatar_url: uploadedAvatar.url },
+        {
+          onSuccess: () => {
+            form.reset();
+            refetch();
+            GlobalLoader.set(false);
+          },
+          onError: () => {
+            toast({
+              title: 'something went wrong try again',
+              variant: 'destructive',
+            });
+            GlobalLoader.set(false);
+          },
+        }
+      );
+    })();
+  };
   const tipPageUrl = generateTipPageUrl(data?.url_handle);
   const copyTipPageUrl = () => {
     if (!tipPageUrl) return;
@@ -91,7 +136,9 @@ export default function TipPagePage() {
       </div>
       <Separator />
       <div className="flex justify-center my-5">
-        <TipPageAvatarSection url={data.avatar_url} onClickAction={() => {}} />
+        <TipPageAvatarSection url={data.avatar_url}>
+          <AvatarUploadModal onFileChosen={onFileChosen} />
+        </TipPageAvatarSection>
       </div>
       <div className="text-2xl">Settings</div>
       <TipPageForm form={form} />

@@ -10,13 +10,15 @@ import { UserService } from './user.service';
 import { UserTrpcMiddleware } from './user.trpc.middleware';
 import { z } from 'zod';
 import { DonationService } from '../donation/donation.service';
+import { FileService } from '../file/file.service';
 @Injectable()
 export class UserTrpcResolver {
   constructor(
     private userService: UserService,
     private donationService: DonationService,
     private trpc: TrpcService,
-    private trpcMiddleware: UserTrpcMiddleware
+    private trpcMiddleware: UserTrpcMiddleware,
+    private fileService: FileService
   ) {}
   private readonly publicProcedure = this.trpc.use.procedure;
   private readonly protectedProcedure = this.trpc.use.procedure.use(
@@ -68,6 +70,19 @@ export class UserTrpcResolver {
           input
         );
         return settings;
+      });
+  }
+  listLibraryFiles() {
+    return this.protectedProcedure.query(async ({ ctx }) => {
+      return this.fileService.listFilesFromLibrary(ctx.id);
+    });
+  }
+  deleteFileFromLibrary() {
+    return this.protectedProcedure
+      .input(z.object({ file_id: z.string() }))
+      .mutation(async ({ ctx, input }) => {
+        await this.fileService.deleteFileFromLibrary(ctx.id, input.file_id);
+        return { deleted: input.file_id };
       });
   }
 }

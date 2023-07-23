@@ -15,6 +15,8 @@ import { AxiomModule } from './lib/axiom/axiom.module';
 import { ReportModule } from './lib/report/report.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { FileModule } from './file/file.module';
+import { S3ClientModule } from './lib/s3-client/s3-client.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { AuthModule } from './auth/auth.module';
     ReportModule,
     UserModule,
     AuthModule,
+    FileModule,
+    S3ClientModule,
   ],
   controllers: [AppController],
   providers: [AppService],

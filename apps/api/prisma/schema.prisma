@@ -25,6 +25,7 @@ model User{
   payout                    Payout[]
   payout_info               PayoutInfo[]
   donation_page             DonationPage?
+  file_library              FileLibrary?
 }
 model Account {
   id                 String  @id @default(cuid())
@@ -152,6 +153,25 @@ model PayoutInfo  {
   bank_account_number   String
   user_id               String    
   user                  User            @relation(fields: [user_id],references: [id])
+}
+model FileLibrary{
+  id                          String        @id @default(cuid())
+  total_size_in_byte           String 
+  upload                      Upload[]
+  user_id                     String        @unique
+  user                        User          @relation(fields: [user_id],references: [id])
+}
+model Upload{
+  id                    String        @id @default(cuid())
+  file_uid              String        @unique
+  public_url            String         
+  size_in_byte          String 
+  created_at            DateTime      @default(now())
+  uploaded_at           DateTime?
+  original_name         String       
+  file_type             String 
+  file_library_id       String?
+  file_library          FileLibrary?   @relation(fields: [file_library_id],references: [id])
 }
 model InviteToRegister {
   id          String        @id    @default(cuid())

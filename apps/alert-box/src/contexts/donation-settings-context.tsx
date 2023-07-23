@@ -19,9 +19,20 @@ export const DonationSettingProvider = ({
   const duration = response?.duration || 0;
   const sound_href = response?.sound_href || '';
   const font_color = response?.font_color || '';
+  const font_size = response?.font_size || '48px';
+  const message_font_size = response?.message_font_size || '30px';
+  const font_weight = response?.font_weight || 800;
   return (
     <donationSettingContext.Provider
-      value={{ font_color, image_href, duration, sound_href }}
+      value={{
+        font_color,
+        image_href,
+        duration,
+        sound_href,
+        font_size,
+        message_font_size,
+        font_weight,
+      }}
     >
       {children}
     </donationSettingContext.Provider>

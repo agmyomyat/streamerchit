@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/form';
 import { ColorPickerInput } from '../components/color-picker-input';
 import { Slider } from '@/components/ui/slider';
-import { Input } from '@/components/ui/input';
 
 interface SettingsSectionProps {
   form: UseFormReturn<SettingFormData>;

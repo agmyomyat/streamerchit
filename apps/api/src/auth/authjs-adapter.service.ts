@@ -46,6 +46,7 @@ export class AuthjsAdapterService {
           ...data,
           id: user_id,
           Balance: { create: {} },
+          file_library: { create: { total_size_in_byte: '0' } },
           donation_setting: {
             create: {
               duration: 10,

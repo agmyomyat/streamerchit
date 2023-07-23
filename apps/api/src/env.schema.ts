@@ -15,5 +15,10 @@ export const ENV_SCHEMA = z.object({
   PAYMENT_JWT_SECRET: z.string(),
   AUTH_ACCESS_TOKEN_SECRET: z.string(),
   AUTHJS_ADAPTER_ACCESS_SECRET: z.string(),
+  R2_ACCOUNT_ID: z.string(),
+  R2_ACCESS_KEY: z.string(),
+  R2_SECRET_KEY: z.string(),
+  R2_BUCKET_NAME: z.string(),
+  R2_PUBLIC_URL: z.string(),
 });
 export type ENV_VARS = z.infer<typeof ENV_SCHEMA>;

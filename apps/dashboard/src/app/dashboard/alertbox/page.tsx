@@ -10,6 +10,11 @@ import { SettingsSection } from './templates/settings-section';
 import { useEffect } from 'react';
 import { GlobalLoader } from '@/global-stores/global-loading';
 import { use_SC_Session } from '@/lib/provider/session-checker';
+import { MediaSection } from './templates/media-section';
+import { SoundUploadModal } from './components/sound-upload-modal';
+import { ImageUploadModal } from './components/image-upload-modal';
+import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
+import { uploadFile } from '@/lib/upload-file';
 function testDonation(token?: string | null) {
   if (!token) throw new Error('No token provided');
   return fetch('http://localhost:3333/v1/alertbox/test', {
@@ -44,11 +49,106 @@ export default function Page() {
   const form = useForm<SettingFormData>();
   const { mutate, isLoading: updatingSetting } =
     trpcReact.user.updateDonationSettings.useMutation();
+  const { mutate: deleteFileMutate } =
+    trpcReact.user.fileLibrary.deleteFileFromLibrary.useMutation();
   const { toast } = useToast();
   const alertBoxUrl = generateAlertBoxUrl(
     'http://localhost:5173',
     data?.alertbox_listener_token
   );
+  const onSubmitSoundUrl = async (url: string) => {
+    const file_id = extractFileKeyAndExtFromUrl(data?.sound_href!);
+    if (file_id) {
+      deleteFileMutate({ file_id });
+    }
+    form.handleSubmit((data) => {
+      mutate(
+        { ...data, sound_href: url },
+        {
+          onSuccess: () => {
+            form.reset();
+            refetch();
+            GlobalLoader.set(false);
+          },
+          onError: () => {
+            toast({
+              title: 'something went wrong try again',
+              variant: 'destructive',
+            });
+            GlobalLoader.set(false);
+          },
+        }
+      );
+    })();
+  };
+  const onSubmitImageUrl = async (url: string) => {
+    const file_id = extractFileKeyAndExtFromUrl(data?.image_href!);
+    if (file_id) {
+      deleteFileMutate({ file_id });
+    }
+    form.handleSubmit((data) => {
+      mutate({ ...data, image_href: url },
+        {
+          onSuccess: () => {
+            form.reset();
+            refetch();
+            GlobalLoader.set(false);
+          },
+          onError: () => {
+            toast({
+              title: 'something went wrong try again',
+              variant: 'destructive',
+            });
+            GlobalLoader.set(false);
+          },
+        }
+      );
+    })();
+  };
+  const onFileChosen = async (
+    file: File[],
+    old_file_url: string,
+    file_url_replace_key: 'image_href' | 'sound_href'
+  ) => {
+    GlobalLoader.set(true);
+    let uploadedFile: { key: string; url: string };
+
+    const file_id = extractFileKeyAndExtFromUrl(old_file_url);
+    if (file_id) {
+      deleteFileMutate({ file_id });
+    }
+    try {
+      uploadedFile = await uploadFile(file);
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: 'something went wrong try again',
+        variant: 'destructive',
+      });
+      return;
+    } finally {
+      GlobalLoader.set(false);
+    }
+    form.handleSubmit((data) => {
+      mutate(
+        { ...data, [file_url_replace_key]: uploadedFile.url },
+        {
+          onSuccess: () => {
+            form.reset();
+            refetch();
+            GlobalLoader.set(false);
+          },
+          onError: () => {
+            toast({
+              title: 'something went wrong try again',
+              variant: 'destructive',
+            });
+            GlobalLoader.set(false);
+          },
+        }
+      );
+    })();
+  };
   useEffect(() => {
     if (fetchingSettings || updatingSetting || loadingSettings) {
       GlobalLoader.set(true);
@@ -97,6 +197,22 @@ export default function Page() {
           </Button>
         </div>
       </div>
+      <MediaSection>
+        <SoundUploadModal
+          onSubmitSoundUrl={onSubmitSoundUrl}
+          onFileChosen={(file) => {
+            onFileChosen(file, data.sound_href, 'sound_href');
+          }}
+          sound_url={data.sound_href}
+        />
+        <ImageUploadModal
+          onSubmitImageUrl={onSubmitImageUrl}
+          image_url={data.image_href}
+          onFileChosen={(file) => {
+            onFileChosen(file, data.image_href, 'image_href');
+          }}
+        />
+      </MediaSection>
       <h1 className="text-2xl font-bold mb-3">Settings</h1>
       <div>
         <SettingsSection form={form} />

@@ -4,6 +4,9 @@ export interface SettingData {
   sound_href: string;
   duration: number;
   font_color: string;
+  font_size: string;
+  message_font_size: string;
+  font_weight: number;
 }
 export const useFetchSettings = (url: string, token: string | null) => {
   const [response, setResponse] = useState<SettingData | null>(null);
