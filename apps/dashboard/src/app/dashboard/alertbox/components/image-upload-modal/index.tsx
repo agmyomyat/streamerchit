@@ -23,7 +23,7 @@ export function ImageUploadModal({
           unoptimized
           alt={'image'}
           src={image_url}
-          className="max-h-[200px]"
+          className="h-full max-h-[200px]"
           width={200}
           height={200}
         />
