@@ -17,6 +17,7 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { S3ClientModule } from './lib/s3-client/s3-client.module';
+import { PayoutModule } from './payout/payout.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { S3ClientModule } from './lib/s3-client/s3-client.module';
     AuthModule,
     FileModule,
     S3ClientModule,
+    PayoutModule,
   ],
   controllers: [AppController],
   providers: [AppService],

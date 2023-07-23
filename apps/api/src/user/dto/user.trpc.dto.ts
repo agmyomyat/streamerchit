@@ -27,3 +27,10 @@ export const UpdateTipPageSettingsInputZod = z.object({
   avatar_url: z.string(),
   memo: z.string().nullable(),
 });
+export const CreatePayoutInputZod = z.object({
+  amount: z.number().int().min(30000),
+  bank_account_number: z.string(),
+  bank_type: z.string(),
+  bank_username: z.string(),
+  note: z.string(),
+});

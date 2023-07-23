@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { TrpcService } from '../lib/trpc/trpc.service';
 import {
+  CreatePayoutInputZod,
   GetDonationHistoryInputZod,
   GetStreamerInfoInputZod,
   UpdateDonationSettingsInputZod,
@@ -11,6 +12,9 @@ import { UserTrpcMiddleware } from './user.trpc.middleware';
 import { z } from 'zod';
 import { DonationService } from '../donation/donation.service';
 import { FileService } from '../file/file.service';
+import { PrismaService } from '../lib/prisma/prisma.service';
+import { TRPCError } from '@trpc/server';
+import { PayoutService } from '../payout/payout.service';
 @Injectable()
 export class UserTrpcResolver {
   constructor(
@@ -18,7 +22,9 @@ export class UserTrpcResolver {
     private donationService: DonationService,
     private trpc: TrpcService,
     private trpcMiddleware: UserTrpcMiddleware,
-    private fileService: FileService
+    private fileService: FileService,
+    private prisma: PrismaService,
+    private payoutService: PayoutService
   ) {}
   private readonly publicProcedure = this.trpc.use.procedure;
   private readonly protectedProcedure = this.trpc.use.procedure.use(
@@ -83,6 +89,22 @@ export class UserTrpcResolver {
       .mutation(async ({ ctx, input }) => {
         await this.fileService.deleteFileFromLibrary(ctx.id, input.file_id);
         return { deleted: input.file_id };
+      });
+  }
+  createPayout() {
+    return this.protectedProcedure
+      .input(CreatePayoutInputZod)
+      .mutation(async ({ ctx, input }) => {
+        const balance = await this.prisma.balance.findUniqueOrThrow({
+          where: { id: ctx.id },
+        });
+        if (balance.active_total < input.amount) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Insufficient funds',
+          });
+        }
+        return this.payoutService.createPayout(ctx.id, input);
       });
   }
 }

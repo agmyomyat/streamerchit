@@ -41,6 +41,9 @@ export class TrpcRouterMiddleware implements NestMiddleware {
       transactionStatus: this.donationResolver.getDonationTransactionStatus(),
       createPaymentSession: this.donationResolver.createPaymentSession(),
     });
+    const payout = router({
+      create: this.userResolver.createPayout(),
+    });
     const user = router({
       info: this.userResolver.queryStreamerInfo(),
       updateDonationSettings: this.userResolver.updateDonationSettings(),
@@ -49,6 +52,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
       getTipPageSettings: this.userResolver.getTipPageSettings(),
       updatetipPageSettings: this.userResolver.updateTipPageSetttings(),
       getDonationHistory: this.userResolver.getDonationHistory(),
+      payout,
       fileLibrary: router({
         listFiles: this.userResolver.listLibraryFiles(),
         deleteFileFromLibrary: this.userResolver.deleteFileFromLibrary(),

@@ -6,11 +6,12 @@ import { AuthModule } from '../auth/auth.module';
 import { UserTrpcMiddleware } from './user.trpc.middleware';
 import { DonationModule } from '../donation/donation.module';
 import { FileModule } from '../file/file.module';
+import { PayoutModule } from '../payout/payout.module';
 
 @Module({
   providers: [UserService, UserTrpcResolver, UserTrpcMiddleware],
   controllers: [UserController],
-  imports: [AuthModule, DonationModule, FileModule],
+  imports: [AuthModule, DonationModule, FileModule, PayoutModule],
   exports: [UserTrpcResolver],
 })
 export class UserModule {}
