@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../lib/prisma/prisma.service';
 import { customAlphabet } from 'nanoid';
-import { CreatePayoutPayload } from './payout.interfaces';
+import {
+  CreatePayoutPayload,
+  ListPayoutHistoryQuery,
+} from './payout.interfaces';
 @Injectable()
 export class PayoutService {
   constructor(private prisma: PrismaService) {}
@@ -18,6 +21,17 @@ export class PayoutService {
         payout_uid,
         user: { connect: { id: user_id } },
       },
+    });
+  }
+  async listPayoutHistory(
+    user_id: string,
+    { query: { take = 15, skip = 0 } }: ListPayoutHistoryQuery
+  ) {
+    return this.prisma.payout.findMany({
+      where: { user_id },
+      orderBy: { createdAt: 'desc' },
+      take: take,
+      skip: skip,
     });
   }
 }

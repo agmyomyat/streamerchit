@@ -5,3 +5,10 @@ export interface CreatePayoutPayload {
   bank_username: string;
   note: string;
 }
+
+export interface ListPayoutHistoryQuery {
+  query: {
+    take?: number;
+    skip?: number;
+  };
+}
