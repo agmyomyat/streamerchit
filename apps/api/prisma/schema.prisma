@@ -135,6 +135,7 @@ model DonationPage {
 
 model Payout {
   id                    String    @id @default(cuid())
+  payout_uid            String    
   amount                Int
   createdAt             DateTime  @default(now())
   note                  String    @db.Text
