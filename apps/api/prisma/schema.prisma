@@ -143,7 +143,7 @@ model Payout {
   bank_username         String
   bank_type             String
   bank_account_number   String
-  authorized_at         DateTime 
+  authorized_at         DateTime?
   user_id               String 
   user                  User            @relation(fields: [user_id],references: [id])
 }
