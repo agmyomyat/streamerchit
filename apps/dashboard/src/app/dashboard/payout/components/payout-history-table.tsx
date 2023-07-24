@@ -23,15 +23,14 @@ export function PayoutHistoryTable(props: PayoutHistoryTableProps) {
   return (
     <Card className="w-full h-[600px] max-h-full">
       <Table>
-        <TableCaption className={cn({ hidden: !props.data?.length })}>
-          A list of your recent tip history.
-        </TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">id</TableHead>
             <TableHead>Date</TableHead>
-            <TableHead>Bank Name</TableHead>
+            <TableHead>Payment Name</TableHead>
+            <TableHead>Account Number</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Amount</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -40,26 +39,36 @@ export function PayoutHistoryTable(props: PayoutHistoryTableProps) {
               <TableCell className="font-medium"></TableCell>
             </TableRow>
           ) : (
-            props.data.map((item) => {
+            props.data.map((item, idx) => {
               return (
-                <TableRow>
+                <TableRow key={idx}>
                   <TableCell className="font-medium">
                     {item.payout_uid}
                   </TableCell>
                   <TableCell className="text-xs truncate">
-                    {HumanizeDate(item.createdAt as unknown as Date)}{' '}
+                    {HumanizeDate(item.createdAt)}
                   </TableCell>
                   <TableCell>{item.bank_type}</TableCell>
+                  <TableCell className="text-xs truncate">
+                    {item.bank_account_number}
+                  </TableCell>
                   <TableCell className="whitespace-break-spaces text-xs">
                     {item.status}
                   </TableCell>
+                  <TableCell className="">{item.amount}</TableCell>
                 </TableRow>
               );
             })
           )}
         </TableBody>
       </Table>
-      <div className="w-full flex justify-center">No History Available</div>
+      <div
+        className={cn('w-full flex justify-center', {
+          hidden: props.data?.length,
+        })}
+      >
+        No History Available
+      </div>
     </Card>
   );
 }

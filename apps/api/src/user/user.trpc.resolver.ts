@@ -96,15 +96,6 @@ export class UserTrpcResolver {
     return this.protectedProcedure
       .input(CreatePayoutInputZod)
       .mutation(async ({ ctx, input }) => {
-        const balance = await this.prisma.balance.findUniqueOrThrow({
-          where: { id: ctx.id },
-        });
-        if (balance.active_total < input.amount) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'Insufficient funds',
-          });
-        }
         return this.payoutService.createPayout(ctx.id, input);
       });
   }
