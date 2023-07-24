@@ -40,8 +40,9 @@ export class PaymentController {
           percentage_fee: PAYMENT_FEE_CUT_FOR_STREAMER,
           fix_fee: '0',
         });
-        const computerize_total = computerizeAmount(body.totalAmount);
-        const computerize_active_total = computerizeAmount(active_total);
+        // should i computerize the amount? will be back later
+        const computerize_total = body.totalAmount;
+        const computerize_active_total = active_total;
         if (body.transactionStatus !== 'SUCCESS') {
           await tx.paymentTransaction.update({
             where: { id: body.merchantOrderId },
