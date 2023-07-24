@@ -80,7 +80,7 @@ export function CreatePayoutModal(props: CreatePayoutModalProps) {
             name="bank_username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Your Account Username</FormLabel>
+                <FormLabel>Account Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Aung Aung" {...field} />
                 </FormControl>
