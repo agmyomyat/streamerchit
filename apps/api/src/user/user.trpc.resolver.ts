@@ -117,4 +117,9 @@ export class UserTrpcResolver {
         });
       });
   }
+  checkBalance() {
+    return this.protectedProcedure.query(async ({ ctx }) => {
+      return this.userService.checkBalance(ctx.id);
+    });
+  }
 }

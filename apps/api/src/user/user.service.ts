@@ -20,6 +20,9 @@ export class UserService {
     const { id, user_id: _user_id, ...rest } = tipPage;
     return rest;
   }
+  async checkBalance(user_id: string) {
+    return this.prisma.balance.findUniqueOrThrow({ where: { user_id } });
+  }
   async updateTipPageSettings(
     user_id: string,
     data: Omit<Prisma.DonationPageUpdateInput, 'user_id' | 'id' | 'user'>
