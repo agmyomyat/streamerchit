@@ -1,14 +1,14 @@
 'use client';
 import { trpcReact } from '@/lib/trpc/trpc-react';
 import { TipHistoryTable } from './components/history-table';
-import { useEffect, useMemo, useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 import { GlobalLoader } from '@/global-stores/global-loading';
 import { useToast } from '@/components/ui/use-toast';
 import { use_SC_Session } from '@/lib/provider/session-checker';
+import { usePaginationButtons } from '@/hooks/use-pagination-buttons';
 
 export default function TipHistoryPage() {
-  const [page, setPage] = useState(1);
+  const { Comp: PaginationButtons, page } = usePaginationButtons();
   const { toast } = useToast();
   const { status } = use_SC_Session();
   const {
@@ -44,21 +44,7 @@ export default function TipHistoryPage() {
   return (
     <div className="flex flex-col w-full">
       <TipHistoryTable data={data} />
-      <div className="flex self-center gap-9 my-5">
-        <Button
-          onClick={() => setPage((prev) => prev - 1)}
-          disabled={page === 1}
-        >
-          prev
-        </Button>
-        <div className="w-10 text-center">{page}</div>
-        <Button
-          disabled={data?.length !== 10}
-          onClick={() => setPage((prev) => prev + 1)}
-        >
-          next
-        </Button>
-      </div>
+      <PaginationButtons hasMore={data?.length === 10} />
     </div>
   );
 }
