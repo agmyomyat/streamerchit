@@ -57,7 +57,7 @@ export class AuthjsAdapterService {
                 message_font_color: '#FFFFFF',
                 message_font_weight: 700,
                 image_href:
-                  'https://media.giphy.com/media/7kn27lnYSAE9O/giphy.gif',
+                  'https://media.giphy.com/media/VVGdG2HimJl6APwPiE/giphy-downsized.gif',
                 sound_href:
                   'https://www.redringtones.com/wp-content/uploads/2019/02/wubba-lubba-dub-dub-ringtone.mp3',
                 message_font_size: '24px',
