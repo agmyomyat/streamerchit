@@ -127,8 +127,10 @@ export function CreatePayoutModal(props: CreatePayoutModalProps) {
           />
           <Button
             onClick={() => {
-              props.onSubmit();
-              setOpen(false);
+              props.form.handleSubmit(() => {
+                props.onSubmit();
+                setOpen(false);
+              })();
             }}
           >
             Submit
