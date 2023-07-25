@@ -9,7 +9,7 @@ export function useTransactionStatus(id: string) {
   const intervalRef = useRef<NodeJS.Timer>();
   useEffect(() => {
     if (status === 'SUCCESS') {
-      router.replace('/');
+      router.replace('/donation/success');
     }
   }, [status]);
   useEffect(() => {
