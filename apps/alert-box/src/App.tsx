@@ -49,7 +49,7 @@ function App() {
               textColor={font_color}
               text={donationData[0].name || ''}
             />
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-row gap-4 ml-5">
               <div
                 style={{ fontSize: font_size, fontWeight: font_weight }}
                 className="drop-shadow-donation text-white  font-bold"
