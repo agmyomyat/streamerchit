@@ -21,10 +21,12 @@ export const DonationSettingProvider = ({
   const font_color = response?.font_color || '';
   const font_size = response?.font_size || '48px';
   const message_font_size = response?.message_font_size || '30px';
+  const message_font_color = response?.message_font_color || '#FFFFFF';
   const font_weight = response?.font_weight || 800;
   return (
     <donationSettingContext.Provider
       value={{
+        message_font_color,
         font_color,
         image_href,
         duration,

@@ -6,6 +6,7 @@ export interface SettingData {
   font_color: string;
   font_size: string;
   message_font_size: string;
+  message_font_color: string;
   font_weight: number;
 }
 export const useFetchSettings = (url: string, token: string | null) => {
@@ -30,8 +31,12 @@ export const useFetchSettings = (url: string, token: string | null) => {
       }
     };
     fetchData();
+    const fetchInterval = setInterval(() => {
+      fetchData();
+    }, 5000);
     return () => {
       if (abortController) abortController.abort();
+      clearInterval(fetchInterval);
       setResponse(null);
       setError(null);
     };

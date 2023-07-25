@@ -7,8 +7,14 @@ function App() {
   const { data } = useDonationEvent(
     `${import.meta.env.VITE_BACKEND_URL}/v1/alertbox/sse/donation`
   );
-  const { image_href, font_color, font_size, message_font_size, font_weight } =
-    useDonationSetting();
+  const {
+    image_href,
+    font_color,
+    font_size,
+    message_font_size,
+    font_weight,
+    message_font_color,
+  } = useDonationSetting();
 
   if (!image_href)
     return (
@@ -67,6 +73,7 @@ function App() {
             </div>
           </div>
           <DonationMessage
+            text_color={message_font_color}
             text_size={message_font_size}
             message={
               donationData[0].message
