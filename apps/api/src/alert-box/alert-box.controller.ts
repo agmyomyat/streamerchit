@@ -28,7 +28,7 @@ export class AlertboxController {
       message: 'this is test donation for 10000',
       // message:
       //   'The quick brown fox jumps over the lazy dog. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor semper tincidunt. Fusce hendrerit, mauris id commodo eleifend, lectus urna laoreet justo, a pharetra odio mi ac massa. Quisque posuere vestibulum sem, eget convallis sapien. Proin fringilla ligula id mi vestibulum dapibus.',
-      name: Math.random().toString(),
+      name: 'Maung Maung',
     });
     return { success: true };
   }
