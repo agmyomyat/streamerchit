@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { use_SC_Session } from '@/lib/provider/session-checker';
+import { scSignOut } from '@/lib/auth/sc-sign-out';
 export function NavBar() {
   const session = use_SC_Session();
   const path = usePathname();
@@ -21,10 +22,15 @@ export function NavBar() {
           </div>
         </Link>
         {session?.data?.user ? (
-          <div className={cn({ hidden: path.includes('dashboard') })}>
-            <Link href={'/dashboard/alertbox'} passHref>
-              <Button>Dashboard</Button>
-            </Link>
+          <div className="flex gap-3">
+            <div className={cn({ hidden: path.includes('dashboard') })}>
+              <Link href={'/dashboard/alertbox'} passHref>
+                <Button>Dashboard</Button>
+              </Link>
+            </div>
+            <Button variant={'destructive'} onClick={scSignOut}>
+              Sign Out
+            </Button>
           </div>
         ) : (
           <div>
