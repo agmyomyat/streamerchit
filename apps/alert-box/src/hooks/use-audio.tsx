@@ -27,10 +27,8 @@ export const useAudio = (url: string) => {
   }, [playing]);
   useEffect(() => {
     if (!url) return;
-    if (!audioRef.current) {
-      audioRef.current = new Audio(url);
-      audioRef.current.addEventListener('ended', () => setPlaying(false));
-    }
+    audioRef.current = new Audio(url);
+    audioRef.current.addEventListener('ended', () => setPlaying(false));
     return () => {
       audioRef.current?.removeEventListener('ended', () => setPlaying(false));
     };
