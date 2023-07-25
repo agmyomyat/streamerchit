@@ -23,7 +23,7 @@ export function HighlightedText({
             }}
             key={idx}
             className={clsx(
-              `drop-shadow-donation animate-jump animate-infinite animate-delay-[10ms] animate-ease-linear animate-normal animate-fill-forwards  whitespace-pre`
+              `drop-shadow-donation animate-jump animate-infinite animate-delay-[10ms] animate-ease-linear animate-normal animate-fill-forwards whitespace-pre`
             )}
           >{`${s}`}</div>
         );

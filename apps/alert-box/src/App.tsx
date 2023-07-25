@@ -42,7 +42,7 @@ function App() {
           className="w-full"
         ></div>
         <div>
-          <div className="flex  flex-wrap justify-center gap-5 ">
+          <div className="flex  flex-wrap justify-center">
             <HighlightedText
               fontWeight={font_weight}
               textSize={font_size}
