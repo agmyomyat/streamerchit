@@ -47,7 +47,7 @@ useEffect(() => {
   );
 }
 
-export const use_SC_Session = () => {
+export const useSCSession = () => {
   const ctx = useContext(SessionContext);
   if (!ctx) {
     throw new Error('use_SC_Sessions must be used within a SessionChecker');

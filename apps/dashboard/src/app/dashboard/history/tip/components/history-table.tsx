@@ -36,9 +36,9 @@ export function TipHistoryTable(props: TipHistoryTableProps) {
               <TableCell className="font-medium"></TableCell>
             </TableRow>
           ) : (
-            props.data.map((item) => {
+            props.data.map((item, idx) => {
               return (
-                <TableRow>
+                <TableRow key={idx}>
                   <TableCell className="font-medium">
                     {item.payment_transaction.doner_name}
                   </TableCell>

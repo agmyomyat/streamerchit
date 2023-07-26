@@ -2,7 +2,7 @@
 import { trpcReact } from '@/lib/trpc/trpc-react';
 import { PayoutHistoryTable } from './components/payout-history-table';
 import { useToast } from '@/components/ui/use-toast';
-import { use_SC_Session } from '@/lib/provider/session-checker';
+import { useSCSession } from '@/lib/provider/session-checker';
 import { usePaginationButtons } from '@/hooks/use-pagination-buttons';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -20,7 +20,7 @@ const CreatePayoutFormDataZod = z.object({
 export type CreatePayoutFormData = z.infer<typeof CreatePayoutFormDataZod>;
 export default function PayOutPage() {
   const { toast } = useToast();
-  const { status } = use_SC_Session();
+  const { status } = useSCSession();
   const { Comp: PaginationButtons, page } = usePaginationButtons();
   const { data: balance, refetch: refetchBalance } =
     trpcReact.user.checkBalance.useQuery();

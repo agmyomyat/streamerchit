@@ -52,3 +52,4 @@ export const ColorPickerInput = React.forwardRef<
     </div>
   );
 });
+ColorPickerInput.displayName = 'ColorPickerInput';

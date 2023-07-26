@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { SettingsSection } from './templates/settings-section';
 import { useEffect } from 'react';
 import { GlobalLoader } from '@/global-stores/global-loading';
-import { use_SC_Session } from '@/lib/provider/session-checker';
+import { useSCSession } from '@/lib/provider/session-checker';
 import { MediaSection } from './templates/media-section';
 import { SoundUploadModal } from './components/sound-upload-modal';
 import { ImageUploadModal } from './components/image-upload-modal';
@@ -36,7 +36,7 @@ const SettingFormDataZod = z.object({
 });
 export type SettingFormData = z.infer<typeof SettingFormDataZod>;
 export default function Page() {
-  const { status } = use_SC_Session();
+  const { status } = useSCSession();
   const {
     data,
     refetch,
@@ -87,7 +87,8 @@ export default function Page() {
       deleteFileMutate({ file_id });
     }
     form.handleSubmit((data) => {
-      mutate({ ...data, image_href: url },
+      mutate(
+        { ...data, image_href: url },
         {
           onSuccess: () => {
             form.reset();

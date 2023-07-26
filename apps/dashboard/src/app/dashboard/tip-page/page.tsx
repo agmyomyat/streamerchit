@@ -11,7 +11,7 @@ import copy from 'copy-to-clipboard';
 import { TipPageForm } from './templates/tip-page-form';
 import { TipPageAvatarSection } from './templates/avatar-section';
 import { Button } from '@/components/ui/button';
-import { use_SC_Session } from '@/lib/provider/session-checker';
+import { useSCSession } from '@/lib/provider/session-checker';
 import { AvatarUploadModal } from './components/avatar-upload-modal';
 import { uploadAvatar } from './tip-page.request';
 import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
@@ -26,7 +26,7 @@ export type TipPageSettingsFormData = z.infer<
   typeof TipPageSettingsFormDataZod
 >;
 export default function TipPagePage() {
-  const { status } = use_SC_Session();
+  const { status } = useSCSession();
   const {
     data,
     isLoading: loadingTipPage,

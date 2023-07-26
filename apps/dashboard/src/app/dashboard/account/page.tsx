@@ -1,8 +1,8 @@
 'use client';
-import { use_SC_Session } from '@/lib/provider/session-checker';
+import { useSCSession } from '@/lib/provider/session-checker';
 
 export default function AccountPage() {
-  const { data } = use_SC_Session();
+  const { data } = useSCSession();
   return (
     <div>
       <h1 className="text-3xl mb-7 font-bold ">Personal Infomation</h1>

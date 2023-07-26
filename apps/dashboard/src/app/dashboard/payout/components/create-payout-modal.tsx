@@ -39,8 +39,9 @@ export function CreatePayoutModal(props: CreatePayoutModalProps) {
         <DialogHeader>
           <DialogTitle>Pay Out</DialogTitle>
           <DialogDescription>
-            We currently only support "pay" payout methods from dashboard. if
-            you want to us to transfer from bank account please contact us
+            {
+              'We currently only support "pay" payout methods from dashboard. if you want to us to transfer from bank account please contact us'
+            }
           </DialogDescription>
         </DialogHeader>
         <Form {...props.form}>

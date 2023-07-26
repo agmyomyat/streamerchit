@@ -4,10 +4,10 @@ import { Heart } from 'lucide-react';
 import { Button } from '../ui/button';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { use_SC_Session } from '@/lib/provider/session-checker';
+import { useSCSession } from '@/lib/provider/session-checker';
 import { scSignOut } from '@/lib/auth/sc-sign-out';
 export function NavBar() {
-  const session = use_SC_Session();
+  const session = useSCSession();
   const path = usePathname();
   return (
     <div className={'w-full h-16 flex items-center shadow-sm shadow-gray-600'}>

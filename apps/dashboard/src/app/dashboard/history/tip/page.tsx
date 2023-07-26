@@ -4,13 +4,13 @@ import { TipHistoryTable } from './components/history-table';
 import { useEffect } from 'react';
 import { GlobalLoader } from '@/global-stores/global-loading';
 import { useToast } from '@/components/ui/use-toast';
-import { use_SC_Session } from '@/lib/provider/session-checker';
+import { useSCSession } from '@/lib/provider/session-checker';
 import { usePaginationButtons } from '@/hooks/use-pagination-buttons';
 
 export default function TipHistoryPage() {
   const { Comp: PaginationButtons, page } = usePaginationButtons();
   const { toast } = useToast();
-  const { status } = use_SC_Session();
+  const { status } = useSCSession();
   const {
     data,
     error,

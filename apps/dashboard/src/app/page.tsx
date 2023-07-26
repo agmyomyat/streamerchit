@@ -2,12 +2,12 @@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { scSignOut } from '@/lib/auth/sc-sign-out';
-import { use_SC_Session } from '@/lib/provider/session-checker';
+import { useSCSession } from '@/lib/provider/session-checker';
 import React from 'react';
 import { useEffect } from 'react';
 
 export default function Home() {
-  const session = use_SC_Session();
+  const session = useSCSession();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   useEffect(() => {
