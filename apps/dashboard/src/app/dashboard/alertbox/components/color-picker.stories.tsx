@@ -1,13 +1,13 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { ReactColorPicker } from './color-picker';
-const meta: Meta<typeof ReactColorPicker> = {
+import { ColorPicker } from './color-picker';
+const meta: Meta<typeof ColorPicker> = {
   title: 'components/ReactColorPicker',
-  component: ReactColorPicker,
+  component: ColorPicker,
   tags: ['autodocs'],
 };
 
 export default meta;
-type Story = StoryObj<typeof ReactColorPicker>;
+type Story = StoryObj<typeof ColorPicker>;
 export const Default: Story = {
-  args: { defaultValue: '#FFFFFF' },
+  args: { defaultColor: '#FFFFFF' },
 };

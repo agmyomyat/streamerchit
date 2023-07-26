@@ -30,7 +30,7 @@ export function PaymentProvidersModal() {
     const values = donationForm.getValues();
     mutateAsync({
       amount: parseInt(values.amount),
-      donation_page_handle: params.handle,
+      donation_page_handle: params.handle as string,
       message: values.message,
       name: values.name,
       payment_name: paymentProvider,

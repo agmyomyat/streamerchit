@@ -15,7 +15,7 @@ export const Default: Story = {
   args: {
     children: (
       <div>
-        <PaymentCard
+        {/* <PaymentCard
           label="Pay with QR"
           methodName="QR"
           selectedMethod="QR"
@@ -30,7 +30,7 @@ export const Default: Story = {
           setMethod={() => ''}
         >
           <APP />
-        </PaymentCard>
+        </PaymentCard> */}
       </div>
     ),
     total: '10000',
