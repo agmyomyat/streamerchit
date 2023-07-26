@@ -17,7 +17,7 @@ import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
 import { uploadFile } from '@/lib/upload-file';
 function testDonation(token?: string | null) {
   if (!token) throw new Error('No token provided');
-  return fetch('http://localhost:3333/v1/alertbox/test', {
+  return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/alertbox/test`, {
     headers: {
       Authorization: token,
     },
@@ -43,9 +43,7 @@ export default function Page() {
     error,
     isFetching: fetchingSettings,
     isLoading: loadingSettings,
-  } = trpcReact.user.getDonationSettings.useQuery(undefined, {
-    enabled: status === 'authenticated',
-  });
+  } = trpcReact.user.getDonationSettings.useQuery(undefined, {});
   const form = useForm<SettingFormData>();
   const { mutate, isLoading: updatingSetting } =
     trpcReact.user.updateDonationSettings.useMutation();
@@ -53,7 +51,7 @@ export default function Page() {
     trpcReact.user.fileLibrary.deleteFileFromLibrary.useMutation();
   const { toast } = useToast();
   const alertBoxUrl = generateAlertBoxUrl(
-    'http://localhost:5173',
+    `${process.env.NEXT_PUBLIC_ALERTBOX_URL}`,
     data?.alertbox_listener_token
   );
   const onSubmitSoundUrl = async (url: string) => {
