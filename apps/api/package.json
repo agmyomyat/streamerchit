@@ -8,7 +8,7 @@
   "main": "src/lib/trpc/types.ts",
   "types": "src/lib/trpc/types.ts",
   "scripts": {
-    "build": "nest build",
+    "build": "npx prisma generate nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "nest": "nest",
     "start": "nest start",
