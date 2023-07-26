@@ -8,5 +8,5 @@ export const GET = (req: Request) => {
   if (invite_key) {
     cookies().set('invite_key', invite_key);
   }
-  return NextResponse.redirect('http://localhost:3000/sign-in');
+  return NextResponse.redirect('https://www.streamerchit.com/sign-in');
 };
