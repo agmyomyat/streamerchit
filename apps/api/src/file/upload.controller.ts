@@ -35,7 +35,7 @@ export class UploadController {
           fileType: 'jpg|jpeg|png|gif|webp|ogg|mpeg',
         })
         .addMaxSizeValidator({
-          maxSize: 500000,
+          maxSize: 5000000,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
