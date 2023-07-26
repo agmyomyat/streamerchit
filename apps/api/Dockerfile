@@ -10,9 +10,9 @@ COPY ./apps/api/package*.json ./
 # Install app dependencies
 RUN npm install
 
+RUN	npx prisma generate
 # Bundle app source
 COPY ./apps/api/ .
-
 # Creates a "dist" folder with the production build
 RUN npm run build
 
