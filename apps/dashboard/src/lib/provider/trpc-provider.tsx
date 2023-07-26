@@ -24,7 +24,7 @@ export function TrpcProvider({ children }: { children: React.ReactNode }) {
     trpcReact.createClient({
       links: [
         httpBatchLink({
-          url: 'http://localhost:3333/trpc',
+          url: `${process.env.NEXT_PUBLIC_BACKEND_URL!}/trpc`,
           // You can pass any HTTP headers you wish here
           headers: async () => {
             const token = getSCAccessToken();
