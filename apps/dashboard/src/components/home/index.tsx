@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Button } from '../ui/button';
 
 export default function HomeSectionOne() {
@@ -15,7 +16,9 @@ export default function HomeSectionOne() {
           }
         </h2>
         <div className="ml-6 text-center">
-          <Button>Sign Up</Button>
+          <Link href={'/sign-in'} passHref>
+            <Button>Sign Up</Button>
+          </Link>
         </div>
       </div>
     </section>
