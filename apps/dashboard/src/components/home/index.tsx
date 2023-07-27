@@ -9,7 +9,7 @@ export default function HomeSectionOne() {
           Tip Alerts For Streamer
         </h1>
         <h2 className="text-2xl font-4 font-semibold lh-6 ld-04 pb-11 text-gray-700 text-center">
-          StreamerChit is a free service for streamers to receive tip alerts.
+          StreamerChit is a service for streamers to receive tip alerts.
           <br />
           {
             'The platform is still in beta, so the landing page is not yet complete :('
