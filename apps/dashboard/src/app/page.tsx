@@ -1,40 +1,13 @@
 'use client';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
-import { scSignOut } from '@/lib/auth/sc-sign-out';
-import { useSCSession } from '@/lib/provider/session-checker';
+import HomeSectionOne from '@/components/home';
 import React from 'react';
-import { useEffect } from 'react';
 
 export default function Home() {
-  const session = useSCSession();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  useEffect(() => {
-    console.log(session);
-  }, [session]);
-  const signOutNow = async () => {
-    setIsLoading(true);
-    try {
-      await scSignOut();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'There was an error logging out',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div>{JSON.stringify(session)}</div>
-      {session.status === 'authenticated' ? (
-        <Button disabled={isLoading} onClick={signOutNow}>
-          signout
-        </Button>
-      ) : null}
+      <div>
+        <HomeSectionOne />
+      </div>
     </main>
   );
 }
