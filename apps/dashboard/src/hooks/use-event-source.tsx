@@ -5,7 +5,9 @@ import {
 } from '@legendapp/state/react';
 import { useEffect, useState } from 'react';
 
-export function useEventSource<T extends any[]>(url: string | null) {
+export function useEventSource<T extends Record<any, any> = { ping: boolean }>(
+  url: string | null
+) {
   const eventData$ = useObservable<any>([]);
   const eventData = useSelector(() => eventData$.get());
   useEffect(() => {
@@ -15,6 +17,7 @@ export function useEventSource<T extends any[]>(url: string | null) {
     eventSource = new EventSource(`${url}`);
     eventSource.onmessage = ({ data }) => {
       const donationData: T = JSON.parse(data);
+      if (donationData.ping) return;
       eventData$.unshift({ ...donationData, date: new Date() });
     };
     return () => {
