@@ -5,6 +5,7 @@ import { useQueryValue } from './use-query-value';
 import { useDonationSetting } from '../contexts/donation-settings-context';
 
 interface DonationData {
+  ping: boolean;
   name: string;
   message: string;
   amount: number;
@@ -45,6 +46,7 @@ export function useDonationEvent(sseEndpoint: string) {
     eventSource = new EventSource(`${sseEndpoint}/${_decodeToken.user_id}`);
     eventSource.onmessage = ({ data }) => {
       const donationData: DonationData = JSON.parse(data);
+      if (donationData.ping) return;
       setQueueData((prev) => [donationData, ...prev]);
     };
     return () => {
