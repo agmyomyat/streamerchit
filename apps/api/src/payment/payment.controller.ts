@@ -56,6 +56,7 @@ export class PaymentController {
             data: {
               completed_at: new Date(),
               status: body.transactionStatus,
+              transaction_id: body.transactionId,
               donation: {
                 create: { user: { connect: { id: paymentTransac.user_id } } },
               },
