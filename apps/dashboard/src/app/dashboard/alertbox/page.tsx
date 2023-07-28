@@ -14,7 +14,7 @@ import { MediaSection } from './templates/media-section';
 import { SoundUploadModal } from './components/sound-upload-modal';
 import { ImageUploadModal } from './components/image-upload-modal';
 import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
-import { uploadFile } from '@/lib/upload-file';
+import { uploadS3PresignedFile } from '@/lib/upload-file';
 function testDonation(token?: string | null) {
   if (!token) throw new Error('No token provided');
   return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/alertbox/test`, {
@@ -43,12 +43,16 @@ export default function Page() {
     error,
     isFetching: fetchingSettings,
     isLoading: loadingSettings,
-  } = trpcReact.user.getDonationSettings.useQuery(undefined, {});
+  } = trpcReact.user.getDonationSettings.useQuery(undefined, {
+    enabled: status === 'authenticated',
+  });
   const form = useForm<SettingFormData>();
   const { mutate, isLoading: updatingSetting } =
     trpcReact.user.updateDonationSettings.useMutation();
   const { mutate: deleteFileMutate } =
     trpcReact.user.fileLibrary.deleteFileFromLibrary.useMutation();
+  const { mutateAsync: createFileAsync } =
+    trpcReact.user.fileLibrary.createFile.useMutation();
   const { toast } = useToast();
   const alertBoxUrl = generateAlertBoxUrl(
     `${process.env.NEXT_PUBLIC_ALERTBOX_URL}`,
@@ -110,27 +114,45 @@ export default function Page() {
     file_url_replace_key: 'image_href' | 'sound_href'
   ) => {
     GlobalLoader.set(true);
-    let uploadedFile: { key: string; url: string };
+    let createFileData: Awaited<ReturnType<typeof createFileAsync>>;
 
     const file_id = extractFileKeyAndExtFromUrl(old_file_url);
-    if (file_id) {
-      deleteFileMutate({ file_id });
-    }
     try {
-      uploadedFile = await uploadFile(file);
+      createFileData = await createFileAsync({
+        file_type: file[0].type,
+        original_name: file[0].name,
+        size_in_byte: file[0].size,
+      });
     } catch (e) {
-      console.log(e);
       toast({
-        title: 'something went wrong try again',
+        title: 'something went wrong while uploading try again',
         variant: 'destructive',
       });
       return;
     } finally {
       GlobalLoader.set(false);
     }
+    try {
+      await uploadS3PresignedFile(createFileData.presigned_upload_url, file);
+    } catch (e) {
+      if (file_id) {
+        deleteFileMutate({ file_id });
+      }
+      console.log(e);
+      toast({
+        title: 'something went wrong while uploading try again',
+        variant: 'destructive',
+      });
+      return;
+    } finally {
+      GlobalLoader.set(false);
+    }
+    if (file_id) {
+      deleteFileMutate({ file_id });
+    }
     form.handleSubmit((data) => {
       mutate(
-        { ...data, [file_url_replace_key]: uploadedFile.url },
+        { ...data, [file_url_replace_key]: createFileData.public_url },
         {
           onSuccess: () => {
             form.reset();

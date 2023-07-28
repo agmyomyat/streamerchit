@@ -15,6 +15,7 @@ import { useSCSession } from '@/lib/provider/session-checker';
 import { AvatarUploadModal } from './components/avatar-upload-modal';
 import { uploadAvatar } from './tip-page.request';
 import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
+import { uploadS3PresignedFile } from '@/lib/upload-file';
 const TipPageSettingsFormDataZod = z.object({
   memo: z.string().nullable(),
   display_name: z.string(),
@@ -40,6 +41,8 @@ export default function TipPagePage() {
     trpcReact.user.updatetipPageSettings.useMutation();
   const { mutate: deleteFileMutate } =
     trpcReact.user.fileLibrary.deleteFileFromLibrary.useMutation();
+  const { mutateAsync: createFileAsync } =
+    trpcReact.user.fileLibrary.createFile.useMutation();
   const { toast } = useToast();
   const form = useForm<TipPageSettingsFormData>({
     defaultValues: {
@@ -52,27 +55,46 @@ export default function TipPagePage() {
   });
   const onFileChosen = async (file: File[]) => {
     GlobalLoader.set(true);
-    let uploadedAvatar: { key: string; url: string };
 
+    let createFileData: Awaited<ReturnType<typeof createFileAsync>>;
     const oldAvatarUrl = form.getValues().avatar_url;
     const file_id = extractFileKeyAndExtFromUrl(oldAvatarUrl);
-    if (file_id) {
-      deleteFileMutate({ file_id });
-    }
     try {
-      uploadedAvatar = await uploadAvatar(file);
+      createFileData = await createFileAsync({
+        file_type: file[0].type,
+        original_name: file[0].name,
+        size_in_byte: file[0].size,
+      });
     } catch (e) {
-      console.log(e);
       toast({
-        title: 'something went wrong try again',
+        title: 'something went wrong while uploading try again',
         variant: 'destructive',
       });
+      return;
     } finally {
       GlobalLoader.set(false);
     }
+    try {
+      await uploadS3PresignedFile(createFileData.presigned_upload_url, file);
+    } catch (e) {
+      if (file_id) {
+        deleteFileMutate({ file_id });
+      }
+      console.log(e);
+      toast({
+        title: 'something went wrong while uploading try again',
+        variant: 'destructive',
+      });
+      return;
+    } finally {
+      GlobalLoader.set(false);
+    }
+    if (file_id) {
+      deleteFileMutate({ file_id });
+    }
     form.handleSubmit((data) => {
       mutate(
-        { ...data, avatar_url: uploadedAvatar.url },
+        { ...data, avatar_url: createFileData.public_url },
         {
           onSuccess: () => {
             form.reset();

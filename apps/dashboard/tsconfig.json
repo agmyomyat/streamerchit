@@ -45,7 +45,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "isolatedModules": true,
-    "preserveSymlinks": true,
     "jsx": "preserve",
     "incremental": true,
     "paths": {
@@ -58,5 +57,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["./node_modules"]
+  "exclude": ["node_modules"]
 }

@@ -4,6 +4,7 @@ import { ENV_VARS } from '../../env.schema';
 import {
   DeleteObjectCommand,
   DeleteObjectCommandInput,
+  PutBucketCorsCommand,
   PutObjectCommand,
   PutObjectCommandInput,
   S3Client,
@@ -54,6 +55,19 @@ export class S3ClientService {
   }
   async createUploadPresignedUrl(file_key: string) {
     const client = this.storageClient();
+    await client.send(
+      new PutBucketCorsCommand({
+        Bucket: this.bucket,
+        CORSConfiguration: {
+          CORSRules: new Array({
+            AllowedHeaders: ['content-type'], //this is important, do not use "*"
+            AllowedMethods: ['GET', 'PUT', 'HEAD'],
+            AllowedOrigins: ['*'],
+            ExposeHeaders: [],
+          }),
+        },
+      })
+    );
     const params = {
       Bucket: this.bucket,
       Key: file_key,
