@@ -3,11 +3,8 @@ import { PrismaService } from '../lib/prisma/prisma.service';
 import { nanoid } from 'nanoid';
 import { S3ClientService } from '../lib/s3-client/s3-client.service';
 interface CreateUploadPayLoad {
-  total_size_in_byte: number;
   file_type: string;
   original_name: string;
-  file_uid: string;
-  public_url: string;
   size_in_byte: number;
 }
 @Injectable()
@@ -20,9 +17,12 @@ export class FileService {
     const fileLibrary = await this.prisma.fileLibrary.findUniqueOrThrow({
       where: { user_id },
     });
+    const file_extension = this.getFileExtension(payload.original_name);
+    const file_uid = nanoid(21) + '.' + file_extension;
+    const signedUrl = await this.s3Client.createUploadPresignedUrl(file_uid);
     const incrementedTotal =
-      parseInt(fileLibrary.total_size_in_byte) + payload.total_size_in_byte;
-    return this.prisma.fileLibrary.update({
+      parseInt(fileLibrary.total_size_in_byte) + payload.size_in_byte;
+    await this.prisma.fileLibrary.update({
       where: { user_id },
       data: {
         total_size_in_byte: incrementedTotal.toString(),
@@ -30,16 +30,21 @@ export class FileService {
           create: {
             file_type: payload.file_type,
             original_name: payload.original_name,
-            file_uid: payload.file_uid,
-            public_url: payload.public_url,
+            file_uid: file_uid,
+            public_url: signedUrl.public_url,
             size_in_byte: payload.size_in_byte.toString(),
             uploaded_at: new Date(),
           },
         },
       },
-      include: { upload: true },
     });
+    return {
+      file_uid,
+      presigned_upload_url: signedUrl.signed_url,
+      public_url: signedUrl.public_url,
+    };
   }
+
   public getFileExtension(filename: string) {
     return filename.split('.').pop();
   }

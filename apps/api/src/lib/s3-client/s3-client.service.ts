@@ -8,6 +8,7 @@ import {
   PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { FileData, FileServiceUploadResult } from './s3-client.interfaces';
 @Injectable()
 export class S3ClientService {
@@ -50,6 +51,21 @@ export class S3ClientService {
       console.error(err);
       throw new Error('An error occurred while uploading the file.');
     }
+  }
+  async createUploadPresignedUrl(file_key: string) {
+    const client = this.storageClient();
+    const params = {
+      Bucket: this.bucket,
+      Key: file_key,
+    } satisfies PutObjectCommandInput;
+    const signed_url = await getSignedUrl(
+      client,
+      new PutObjectCommand(params),
+      {
+        expiresIn: 3600,
+      }
+    );
+    return { signed_url, public_url: `${this.public_url}/${file_key}` };
   }
   async upload(
     fileData: Express.Multer.File

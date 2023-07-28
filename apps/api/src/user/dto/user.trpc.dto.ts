@@ -40,3 +40,8 @@ export const ListPayoutHistoryInputZod = z.object({
     skip: z.number().int().optional(),
   }),
 });
+export const CreatefileInLibraryInputZod = z.object({
+  file_type: z.string(),
+  original_name: z.string(),
+  size_in_byte: z.number(),
+});

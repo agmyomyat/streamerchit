@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TrpcService } from '../lib/trpc/trpc.service';
 import {
   CreatePayoutInputZod,
+  CreatefileInLibraryInputZod,
   GetDonationHistoryInputZod,
   GetStreamerInfoInputZod,
   ListPayoutHistoryInputZod,
@@ -83,6 +84,13 @@ export class UserTrpcResolver {
     return this.protectedProcedure.query(async ({ ctx }) => {
       return this.fileService.listFilesFromLibrary(ctx.id);
     });
+  }
+  createfileInLibrary() {
+    return this.protectedProcedure
+      .input(CreatefileInLibraryInputZod)
+      .mutation(async ({ ctx, input }) => {
+        return this.fileService.createUploadInLibrary(ctx.id, input);
+      });
   }
   deleteFileFromLibrary() {
     return this.protectedProcedure

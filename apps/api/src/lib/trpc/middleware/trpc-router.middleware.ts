@@ -58,6 +58,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
       fileLibrary: router({
         listFiles: this.userResolver.listLibraryFiles(),
         deleteFileFromLibrary: this.userResolver.deleteFileFromLibrary(),
+        createFile: this.userResolver.createfileInLibrary(),
       }),
     });
     const _router = router({

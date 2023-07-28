@@ -46,24 +46,26 @@ export class UploadController {
   ) {
     const file_extension = this.fileService.getFileExtension(file.originalname);
     const file_uid = nanoid(21) + '.' + file_extension;
-    const uploadedFileData = await this.s3Service.upload({
-      ...file,
-      originalname: file_uid,
-    });
-    const user_id = req.headers[__INTERNAL_USER_ID_HEADER_KEY__] as string;
-    try {
-      await this.fileService.createUploadInLibrary(user_id, {
-        file_type: file.mimetype,
-        file_uid,
-        original_name: file.originalname,
-        public_url: uploadedFileData.url,
-        size_in_byte: file.size,
-        total_size_in_byte: file.size,
-      });
-    } catch (e) {
-      await this.s3Service.delete({ file_key: file_uid });
-      throw new InternalServerErrorException(e);
-    }
-    return uploadedFileData;
+    // const uploadedFileData = await this.s3Service.upload({
+    //   ...file,
+    //   originalname: file_uid,
+    // });
+    const presigned = await this.s3Service.createUploadPresignedUrl(file_uid);
+    return presigned;
+    //   const user_id = req.headers[__INTERNAL_USER_ID_HEADER_KEY__] as string;
+    //   try {
+    //     await this.fileService.createUploadInLibrary(user_id, {
+    //       file_type: file.mimetype,
+    //       file_uid,
+    //       original_name: file.originalname,
+    //       public_url: uploadedFileData.url,
+    //       size_in_byte: file.size,
+    //       total_size_in_byte: file.size,
+    //     });
+    //   } catch (e) {
+    //     await this.s3Service.delete({ file_key: file_uid });
+    //     throw new InternalServerErrorException(e);
+    //   }
+    //   return uploadedFileData;
   }
 }
