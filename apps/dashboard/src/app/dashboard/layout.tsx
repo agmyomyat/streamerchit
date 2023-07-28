@@ -3,8 +3,8 @@ import { Sidebar } from './components/side-bar';
 import { cn } from '@/utils';
 export const revalidate = 0;
 export const metadata: Metadata = {
-  title: 'streamer achit',
-  description: 'streamer achit',
+  title: 'StreamerChit',
+  description: 'Donation alerts for streamer',
 };
 export default async function DashboardLayout({
   children,
