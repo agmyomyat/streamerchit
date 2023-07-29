@@ -18,7 +18,7 @@ export default function TipHistoryPage() {
     isFetching: fetchingHistory,
   } = trpcReact.user.getDonationHistory.useQuery(
     {
-      query: { skip: page === 1 ? 0 : page * 10, take: 10 },
+      query: { skip: Math.ceil(page - 1) * 10, take: 10 },
     },
     { enabled: status === 'authenticated' }
   );

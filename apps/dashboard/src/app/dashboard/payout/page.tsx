@@ -46,7 +46,7 @@ export default function PayOutPage() {
     isFetching: payoutListFetching,
   } = trpcReact.user.payout.list.useQuery(
     {
-      query: { skip: page === 1 ? 0 : page * 10, take: 10 },
+      query: { skip: Math.ceil(page - 1), take: 10 },
     },
     { enabled: status === 'authenticated' }
   );
