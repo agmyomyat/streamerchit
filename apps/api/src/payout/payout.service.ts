@@ -37,7 +37,6 @@ export class PayoutService {
         where: { user_id },
         data: {
           active_total: { decrement: payload.amount },
-          real_total: { decrement: payload.amount },
         },
       });
       const [r1] = await Promise.all([p1, p2]);
