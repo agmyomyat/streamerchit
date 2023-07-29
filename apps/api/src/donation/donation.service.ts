@@ -6,6 +6,7 @@ import { DingerService } from '../lib/dinger/dinger.service';
 import { PrismaService } from '../lib/prisma/prisma.service';
 import { PaymentService } from '../payment/payment.service';
 import { Prisma } from '@prisma/client';
+import { TRPCError } from '@trpc/server';
 interface CreateDonationTransactionParams {
   paymentSessionToken: string;
   donarPhone?: string;
@@ -84,6 +85,16 @@ export class DonationService {
     const paymentSessionData = this.paymentService.verifyPaymentSessionToken(
       params.paymentSessionToken
     );
+    const getPaymentTransaction =
+      await this.prisma.paymentTransaction.findFirstOrThrow({
+        where: { id: paymentSessionData.payment_transaction_id },
+      });
+    if (getPaymentTransaction.completed_at) {
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: 'Payment already made with this payment session',
+      });
+    }
     const paymentTransaction = await this.prisma.paymentTransaction.update({
       where: { id: paymentSessionData.payment_transaction_id },
       data: { method_name: params.paymentMethod },
