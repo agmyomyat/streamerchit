@@ -86,7 +86,9 @@ export default function TipPagePage() {
       GlobalLoader.set(false);
     }
     try {
-      await uploadS3PresignedFile(createFileData.presigned_upload_url, file);
+      await uploadS3PresignedFile(createFileData.presigned_upload_url, [
+        file[0],
+      ]);
     } catch (e) {
       if (file_id) {
         deleteFileMutate({ file_id });
