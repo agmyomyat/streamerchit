@@ -15,6 +15,8 @@ import { SoundUploadModal } from './components/sound-upload-modal';
 import { ImageUploadModal } from './components/image-upload-modal';
 import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
 import { uploadS3PresignedFile } from '@/lib/upload-file';
+import { isFileBiggerThan } from '@/utils/is-file-bigger-than';
+import { MEDIA_UPLOAD_SIZE_LIMIT } from '@/constants/media-file-upload-size-limit';
 function testDonation(token?: string | null) {
   if (!token) throw new Error('No token provided');
   return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/alertbox/test`, {
@@ -115,6 +117,16 @@ export default function Page() {
   ) => {
     GlobalLoader.set(true);
     let createFileData: Awaited<ReturnType<typeof createFileAsync>>;
+    // limit = 5Mb
+    if (isFileBiggerThan(file[0], MEDIA_UPLOAD_SIZE_LIMIT)) {
+      toast({
+        title: 'file is too big',
+        description: 'file should be less than 5mb',
+        variant: 'destructive',
+      });
+      GlobalLoader.set(false);
+      return;
+    }
 
     const file_id = extractFileKeyAndExtFromUrl(old_file_url);
     try {

@@ -16,6 +16,8 @@ import { AvatarUploadModal } from './components/avatar-upload-modal';
 import { uploadAvatar } from './tip-page.request';
 import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
 import { uploadS3PresignedFile } from '@/lib/upload-file';
+import { isFileBiggerThan } from '@/utils/is-file-bigger-than';
+import { MEDIA_UPLOAD_SIZE_LIMIT } from '@/constants/media-file-upload-size-limit';
 const TipPageSettingsFormDataZod = z.object({
   memo: z.string().nullable(),
   display_name: z.string(),
@@ -55,7 +57,16 @@ export default function TipPagePage() {
   });
   const onFileChosen = async (file: File[]) => {
     GlobalLoader.set(true);
-
+    // limit = 5Mb
+    if (isFileBiggerThan(file[0], MEDIA_UPLOAD_SIZE_LIMIT)) {
+      toast({
+        title: 'file is too big',
+        description: 'file should be less than 5mb',
+        variant: 'destructive',
+      });
+      GlobalLoader.set(false);
+      return;
+    }
     let createFileData: Awaited<ReturnType<typeof createFileAsync>>;
     const oldAvatarUrl = form.getValues().avatar_url;
     const file_id = extractFileKeyAndExtFromUrl(oldAvatarUrl);
