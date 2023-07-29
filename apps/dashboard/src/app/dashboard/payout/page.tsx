@@ -11,7 +11,7 @@ import { CreatePayoutModal } from './components/create-payout-modal';
 import { GlobalLoader } from '@/global-stores/global-loading';
 import { useEffect } from 'react';
 const CreatePayoutFormDataZod = z.object({
-  amount: z.number().min(30000, { message: 'Minimum Payout is 30,000 MMK' }),
+  amount: z.number().min(50000, { message: 'Minimum Payout is 50,000 MMK' }),
   bank_account_number: z.string().nonempty(),
   bank_type: z.string().nonempty({ message: 'please ' }),
   bank_username: z.string().nonempty(),
