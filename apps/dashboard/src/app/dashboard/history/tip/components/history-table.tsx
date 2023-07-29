@@ -20,7 +20,7 @@ interface TipHistoryTableProps {
 }
 export function TipHistoryTable(props: TipHistoryTableProps) {
   return (
-    <Card className="w-full h-[600px] max-h-full">
+    <Card className="w-full min-h-[600px] h-fit">
       <Table>
         <TableHeader>
           <TableRow>
