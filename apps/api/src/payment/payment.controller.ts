@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpException,
   Post,
+  Redirect,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
@@ -23,7 +25,7 @@ export class PaymentController {
   constructor(
     private prisma: PrismaService,
     private paymentService: PaymentService,
-    private alertBox: AlertboxService,
+    private alertBox: AlertboxService
   ) {}
   @UseGuards(CallbackValidationGuard)
   @HttpCode(200)
@@ -84,4 +86,10 @@ export class PaymentController {
       throw new HttpException(e, 500);
     }
   }
+  @Get('callback/redirect/dinger/success')
+  @Redirect('https://streamerchit.com/donation/success')
+  dingerRedirectSuccess() {}
+  @Get('callback/redirect/dinger/fail')
+  @Redirect('https://streamerchit.com/donation/fail')
+  dingerRedirectFail() {}
 }
