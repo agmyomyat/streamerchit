@@ -36,7 +36,7 @@ export function PaymentProvidersModal() {
       payment_name: paymentProvider,
     }).then((res) => {
       storePaymentSessionToken(res.token);
-      router.push(`tip/payment/${routePath}`);
+      router.replace(`tip/payment/${routePath}`);
     });
   }
   return (
