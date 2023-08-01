@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 // Dinger callback body Schema
 export interface DescryptedCallbackRequestBody {
-  totalAmount: number;
+  totalAmount: string;
   createdAt: string;
   transactionStatus: string;
   methodName: string;

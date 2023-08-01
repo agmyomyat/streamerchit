@@ -39,12 +39,12 @@ export class PaymentController {
             where: { id: body.merchantOrderId },
           });
           const active_total = this.paymentService.calculateFee({
-            totalAmount: body.totalAmount,
+            totalAmount: parseInt(body.totalAmount),
             percentage_fee: PAYMENT_FEE_CUT_FOR_STREAMER,
             fix_fee: '0',
           });
           // should i computerize the amount? will be back later
-          const computerize_total = body.totalAmount;
+          const computerize_total = parseInt(body.totalAmount);
           const computerize_active_total = active_total;
           if (body.transactionStatus !== 'SUCCESS') {
             await tx.paymentTransaction.update({
@@ -73,7 +73,7 @@ export class PaymentController {
           });
           await Promise.all([p1, p2]);
           this.alertBox.donationAlertEmit(paymentTransac.user_id, {
-            amount: body.totalAmount,
+            amount: parseInt(body.totalAmount),
             message: paymentTransac.memo,
             name: paymentTransac.doner_name,
           });
