@@ -26,22 +26,16 @@ export class AuthjsAdapterService {
     const user_id = nanoid(20);
     return this.prisma.$transaction(
       async (tx) => {
-        const inviteToRegister = await tx.inviteToRegister.findUniqueOrThrow({
-          where: { id: invite_to_register_id },
-        });
-        if (inviteToRegister.used_by) {
-          throw new TRPCError({
-            code: 'FORBIDDEN',
-            cause: 'invite code',
-            message: 'invite code already used',
-          });
-        }
-        const p1 = tx.inviteToRegister.update({
-          where: { id: invite_to_register_id },
-          data: {
-            used_by: data.email,
-          },
-        });
+        // const inviteToRegister = await tx.inviteToRegister.findUniqueOrThrow({
+        //   where: { id: invite_to_register_id },
+        // });
+        // if (inviteToRegister.used_by) {
+        //   throw new TRPCError({
+        //     code: 'FORBIDDEN',
+        //     cause: 'invite code',
+        //     message: 'invite code already used',
+        //   });
+        // }
         const p2 = tx.user.create({
           data: {
             ...data,
@@ -75,7 +69,7 @@ export class AuthjsAdapterService {
             },
           },
         });
-        const [user] = await Promise.all([p2, p1]);
+        const [user] = await Promise.all([p2]);
         return user;
       },
       { maxWait: 10000, timeout: 20000 }
