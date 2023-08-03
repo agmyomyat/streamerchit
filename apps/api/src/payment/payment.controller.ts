@@ -38,14 +38,25 @@ export class PaymentController {
           const paymentTransac = await tx.paymentTransaction.findUniqueOrThrow({
             where: { id: body.merchantOrderId },
           });
+          const paymentProvider = await tx.paymentProvider.findFirstOrThrow({
+            where: {
+              AND: {
+                name: paymentTransac.payment_provider,
+                method: paymentTransac.method_name,
+              },
+            },
+          });
+          const percentcut =
+            PAYMENT_FEE_CUT_FOR_STREAMER +
+            parseFloat(paymentProvider.fee_percentage);
           const active_total = this.paymentService.calculateFee({
             totalAmount: parseInt(body.totalAmount),
-            percentage_fee: PAYMENT_FEE_CUT_FOR_STREAMER,
+            percentage_fee: percentcut.toString(),
             fix_fee: '0',
           });
           // should i computerize the amount? will be back later
           const computerize_total = parseInt(body.totalAmount);
-          const computerize_active_total = active_total;
+          const computerize_active_total = parseInt(active_total.toString());
           if (body.transactionStatus !== 'SUCCESS') {
             await tx.paymentTransaction.update({
               where: { id: body.merchantOrderId },
