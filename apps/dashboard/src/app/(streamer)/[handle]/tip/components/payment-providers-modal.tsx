@@ -53,13 +53,13 @@ export function PaymentProvidersModal() {
           </DialogTitle>
         </DialogHeader>
         <div className="flex flex-col gap-3 w-full justify-center">
-          <KbzPayButton
+          {/* <KbzPayButton
             onClick={() =>
               createPaymentSession('kbzpay', KBZ_PAY_PROVIDER_NAME)
             }
             disabled={isLoading}
             className="py-6"
-          />
+          /> */}
           <AyaPayButton
             onClick={() =>
               createPaymentSession('ayapay', AYA_PAY_PROVIDER_NAME)
