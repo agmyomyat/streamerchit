@@ -13,6 +13,7 @@ export class FileService {
     private prisma: PrismaService,
     private s3Client: S3ClientService
   ) {}
+  // should refactor. to update after uploaded with presigned url
   async createUploadInLibrary(user_id: string, payload: CreateUploadPayLoad) {
     const fileLibrary = await this.prisma.fileLibrary.findUniqueOrThrow({
       where: { user_id },
