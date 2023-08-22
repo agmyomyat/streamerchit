@@ -9,15 +9,7 @@ import { DingerService } from '../lib/dinger/dinger.service';
 import { JwtService } from '@nestjs/jwt';
 import { PaymentSessionData } from './dto/payment.dto';
 import { nanoid } from 'nanoid';
-interface CreatePaymentTransactionParams {
-  amount: number;
-  streamerName: string;
-  streamerId: string;
-  donarMessage: string;
-  donarName: string;
-  paymentMethod: string;
-  paymentProvider: string;
-}
+import { CreatePaymentTransactionParams } from './payment.interfaces';
 @Injectable()
 export class PaymentService {
   constructor(
