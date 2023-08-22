@@ -55,6 +55,7 @@ model DingerInfo{
   merchant_name   String
   user_id         String      @unique
   user            User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  prebuilt_secret_key  String
 }
 model Session {
   id           String   @id @default(cuid())
