@@ -56,6 +56,7 @@ model DingerInfo{
   user_id         String      @unique
   user            User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   prebuilt_secret_key  String
+  callback_key         String
 }
 model Session {
   id           String   @id @default(cuid())
