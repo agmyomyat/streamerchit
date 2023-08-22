@@ -17,16 +17,14 @@ export function DonationForm() {
   const {
     donationForm: form,
     streamer,
-    openPaymentProviderModal,
+    onSubmit,
+    submitting,
   } = useTipPageContext();
   const watchedAmount = form.watch('amount');
-  function onSubmit() {
-    openPaymentProviderModal();
-  }
   return (
     <Form {...form}>
       <div className="flex flex-col">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={onSubmit} className="space-y-8">
           <FormField
             control={form.control}
             name="name"
@@ -75,7 +73,11 @@ export function DonationForm() {
             </div>
             <div className="font-semibold">Ks: {watchedAmount || 0}</div>
           </div>
-          <Button type="submit" className="mt-5 px-16 self-center">
+          <Button
+            disabled={submitting}
+            type="submit"
+            className="mt-5 px-16 self-center"
+          >
             Donate
           </Button>
         </form>

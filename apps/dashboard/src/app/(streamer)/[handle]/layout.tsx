@@ -18,7 +18,11 @@ export default async function StreamerLayout({
 }) {
   const streamer = await getStreamerInfo(params.handle);
   return (
-    <TipePageProvider image={streamer.image || ''} name={streamer.name || ''}>
+    <TipePageProvider
+      image={streamer.image || ''}
+      name={streamer.name || ''}
+      streamerId={streamer.streamer_id || ''}
+    >
       {children}
     </TipePageProvider>
   );

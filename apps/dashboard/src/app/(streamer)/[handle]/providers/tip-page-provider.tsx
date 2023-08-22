@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { UseFormReturn, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { createContext, useContext, useState } from 'react';
+import { trpcReact } from '@/lib/trpc/trpc-react';
+import { windowRedirect } from '@/utils/window-redirect';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -11,9 +13,12 @@ const formSchema = z.object({
   amount: z.string().min(3, {
     message: 'Tip amount must be at least 500',
   }),
-  message: z.string().max(255, {
-    message: 'Message must be less than 255 characters',
-  }),
+  message: z
+    .string()
+    .min(1, { message: 'Message must be not be empty' })
+    .max(255, {
+      message: 'Message must be less than 255 characters',
+    }),
 });
 export type DonationFormData = z.infer<typeof formSchema>;
 interface TipPageContextData {
@@ -29,6 +34,8 @@ interface TipPageContextData {
   paymentProviderModal: boolean;
   openPaymentProviderModal: () => void;
   closePaymentProviderModal: () => void;
+  onSubmit: () => void;
+  submitting:boolean
 }
 
 const TipPageContext = createContext<TipPageContextData | null>(null);
@@ -42,8 +49,15 @@ export function useTipPageContext() {
 export function TipePageProvider(streamer: {
   image: string;
   name: string;
+  streamerId: string;
   children: React.ReactNode;
 }) {
+  const { mutateAsync: prebuiltCheckoutMutate,isLoading } =
+    trpcReact.donation.prebuilt_checkout.useMutation();
+  const form = useForm<DonationFormData>({
+    defaultValues: { name: '', message: '', amount: '' },
+    resolver: zodResolver(formSchema),
+  });
   const [paymentSessionToken, setPaymentSessionToken] = useState('');
   const [paymentProviderModal, setPaymentProviderModal] = useState(false);
   function storePaymentSessionToken(token: string) {
@@ -56,13 +70,23 @@ export function TipePageProvider(streamer: {
   function closePaymentProviderModal() {
     setPaymentProviderModal(false);
   }
-  const form = useForm<DonationFormData>({
-    defaultValues: { name: '', message: '', amount: '' },
-    resolver: zodResolver(formSchema),
+  const onSubmit = form.handleSubmit(async (data) => {
+    const prebuilt_checkout = await prebuiltCheckoutMutate({
+      amount: parseInt(data.amount),
+      donar_name: data.name,
+      message: data.message,
+      streamer_id: streamer.streamerId,
+    });
+    if (prebuilt_checkout.checkout_link) {
+      windowRedirect(prebuilt_checkout.checkout_link);
+    }
   });
+
   return (
     <TipPageContext.Provider
       value={{
+        submitting:isLoading,
+        onSubmit,
         donationForm: form,
         streamer: streamer,
         paymentProviderModal,
