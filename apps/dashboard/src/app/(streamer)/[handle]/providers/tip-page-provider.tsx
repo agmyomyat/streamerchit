@@ -2,9 +2,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { UseFormReturn, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { trpcReact } from '@/lib/trpc/trpc-react';
 import { windowRedirect } from '@/utils/window-redirect';
+import { useToast } from '@/components/ui/use-toast';
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -52,8 +53,21 @@ export function TipePageProvider(streamer: {
   streamerId: string;
   children: React.ReactNode;
 }) {
-  const { mutateAsync: prebuiltCheckoutMutate,isLoading } =
-    trpcReact.donation.prebuilt_checkout.useMutation();
+  const {
+    mutateAsync: prebuiltCheckoutMutate,
+    isLoading,
+    error,
+  } = trpcReact.donation.prebuilt_checkout.useMutation();
+    const { toast } = useToast();
+    useEffect(() => {
+      if (error) {
+        toast({
+          title: 'Error',
+          description: error.message,
+          variant: 'destructive',
+        });
+      }
+    }, [error]); 
   const form = useForm<DonationFormData>({
     defaultValues: { name: '', message: '', amount: '' },
     resolver: zodResolver(formSchema),
