@@ -1,14 +1,14 @@
-import  queryString  from 'node:querystring';
+import * as queryString from 'node:querystring';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import HmacSHA256 from 'crypto-js/hmac-sha256';
+import * as HmacSHA256 from 'crypto-js/hmac-sha256';
 import {
   GetPaymentTokenDto,
   DingerPayDto,
   EncryptPayloadParams,
   EncryptPayloadForPrebuiltForm,
 } from './dinger.dto';
-import NodeRSA from 'node-rsa';
+import * as NodeRSA from 'node-rsa';
 import { DingerPayRO } from './dinger.ro';
 import { PaymentTokenResponse } from './dinger.interface';
 import {
@@ -54,8 +54,8 @@ export class DingerService {
     publicKey.setOptions({ encryptionScheme: 'pkcs1' });
     const payload = publicKey.encrypt(dataJSON, 'base64');
     const hashValue = HmacSHA256(dataJSON, prebuilt_secret_key).toString();
-    const queries = queryString.stringify({payload,hashValue})
-    return `${PREBUILT_FORM_BASE_LINK}/?${queries}`
+    const queries = queryString.stringify({ payload, hashValue });
+    return `${PREBUILT_FORM_BASE_LINK}/?${queries}`;
   }
   @ValidateArguments()
   encryptPayload(dto: EncryptPayloadParams) {
