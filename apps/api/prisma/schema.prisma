@@ -26,6 +26,7 @@ model User{
   payout_info               PayoutInfo[]
   donation_page             DonationPage?
   file_library              FileLibrary?
+  dinger_info               DingerInfo?
 }
 model Account {
   id                 String  @id @default(cuid())
@@ -45,7 +46,16 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
-
+model DingerInfo{
+  id              String      @id     @default(cuid())
+  client_id       String
+  public_key      String      @db.Text
+  merchant_key    String      
+  project_name    String
+  merchant_name   String
+  user_id         String      @unique
+  user            User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
