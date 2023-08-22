@@ -4,11 +4,9 @@ import { NextAuthOptions } from 'next-auth';
 
 export const adapter: NextAuthOptions['adapter'] = {
   createUser: async (user) => {
-    const inviteKey = cookies().get('invite_key')?.value;
-    if (!inviteKey) throw new Error('no invite key found');
     const res = await client.authjsAdapter.createUser.mutate({
       data: user,
-      invite_to_register_id: inviteKey,
+      invite_to_register_id: '',
     });
     return new Promise((r) => {
       r({
