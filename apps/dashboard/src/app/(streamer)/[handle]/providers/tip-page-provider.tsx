@@ -58,16 +58,16 @@ export function TipePageProvider(streamer: {
     isLoading,
     error,
   } = trpcReact.donation.prebuilt_checkout.useMutation();
-    const { toast } = useToast();
-    useEffect(() => {
-      if (error) {
-        toast({
-          title: 'Error',
-          description: error.message,
-          variant: 'destructive',
-        });
-      }
-    }, [error]); 
+  const { toast } = useToast();
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    }
+  }, [error]); 
   const form = useForm<DonationFormData>({
     defaultValues: { name: '', message: '', amount: '' },
     resolver: zodResolver(formSchema),
