@@ -25,7 +25,6 @@ export class UserTrpcResolver {
     private trpc: TrpcService,
     private trpcMiddleware: UserTrpcMiddleware,
     private fileService: FileService,
-    private prisma: PrismaService,
     private payoutService: PayoutService
   ) {}
   private readonly publicProcedure = this.trpc.use.procedure;

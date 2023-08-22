@@ -15,6 +15,7 @@ import { ConfigService } from '@nestjs/config';
 import { decryption } from '../payment-utils/aes-ecb';
 import { DingerCallbackRequestBodyDto } from '../dto/payment.dto';
 import { ENV_VARS } from '../../env.schema';
+import { PrismaService } from '../../lib/prisma/prisma.service';
 
 @Injectable()
 export class CallbackValidationGuard implements CanActivate {

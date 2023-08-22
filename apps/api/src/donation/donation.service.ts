@@ -41,6 +41,12 @@ export class DonationService {
     const { id, user_id, ...rest } = settings;
     return rest;
   }
+  getUserDingerInfo(user_id: string) {
+    return this.prisma.dingerInfo.findUnique({
+      where: { user_id },
+      include: { user: true },
+    });
+  }
   async getDonationHistory(
     user_id: string,
     { query: { take = 15, skip = 0 } }: GetDonationHistoryQuery

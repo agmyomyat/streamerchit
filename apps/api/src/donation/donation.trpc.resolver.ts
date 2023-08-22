@@ -3,11 +3,16 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateDonationTransactionDtoZod,
   CreatePaymentSessionDtoZod,
+  DingerPrebuiltCheckoutInputZod,
   GetDonationTransactionStatusDtoZod,
 } from './dto/donation.dto';
 import { TrpcService } from '../lib/trpc/trpc.service';
 import { PaymentService } from '../payment/payment.service';
 import { DingerService } from '../lib/dinger/dinger.service';
+import { nanoid } from 'nanoid';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
+import { ItemsZod } from '../lib/dinger/dinger.dto';
 
 @Injectable()
 export class DonationTrpcResolver {
@@ -46,6 +51,44 @@ export class DonationTrpcResolver {
           streamerName: streamer.name || '',
         });
         return { token: sessionToken };
+      });
+  }
+  dingerPrebuiltCheckout() {
+    return this.publicProcedure
+      .input(DingerPrebuiltCheckoutInputZod)
+      .mutation(async ({ input }) => {
+        const transaction_id = nanoid();
+        const dinger_info = await this.donationService.getUserDingerInfo(
+          input.streamer_id
+        );
+        if (!dinger_info)
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message:
+              'Payment setup required: Streamer has not set up payment yet. Please Contact us to configure payment',
+          });
+        const items = [
+          {
+            name: `Tip for ${dinger_info.user.name}`,
+            amount: input.amount,
+            quantity: 1,
+          },
+        ] satisfies z.infer<typeof ItemsZod>;
+        const prebuilt_link = this.dinger.generateLinkForPrebuiltForm(
+          {
+            clientId: dinger_info.client_id,
+            customerName: input.donar_name,
+            totalAmount: input.amount,
+            items,
+            merchantKey: dinger_info.merchant_key,
+            merchantOrderId: transaction_id,
+            merchantName: dinger_info.merchant_name,
+            publicKey: dinger_info.public_key,
+            projectName: dinger_info.project_name,
+          },
+          dinger_info.prebuilt_secret_key
+        );
+        return { checkout_link: prebuilt_link };
       });
   }
   createDonationTrasaction() {

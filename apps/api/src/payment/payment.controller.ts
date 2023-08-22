@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpException,
+  Param,
   Post,
   Redirect,
   UseFilters,
@@ -19,6 +20,8 @@ import { computerizeAmount } from './payment-utils/computerize-amount';
 import { PaymentExceptionFilter } from './payment-exception.filter';
 import { AlertboxService } from '../alert-box/alert-box.service';
 import { PrismaService } from '../lib/prisma/prisma.service';
+import { decryption } from './payment-utils/aes-ecb';
+import { DingerCallbackRequestBodyDto } from './dto/payment.dto';
 
 @Controller('payment')
 export class PaymentController {
@@ -27,6 +30,41 @@ export class PaymentController {
     private paymentService: PaymentService,
     private alertBox: AlertboxService
   ) {}
+  @HttpCode(200)
+  @UseFilters(PaymentExceptionFilter)
+  @Post('callback/streamer/:streamer_id')
+  async streamerPaymentCallback(
+    @Param('streamer_id') streamer_id: string,
+    @Body() body: DingerCallbackRequestBodyDto
+  ) {
+    await this.prisma.$transaction(async (tx) => {
+      const streamer = await tx.user.findUniqueOrThrow({
+        where: { id: streamer_id },
+        include: { dinger_info: true },
+      });
+      if (!streamer.dinger_info?.callback_key) {
+        throw new HttpException('Streamer dinger credential not found', 404);
+      }
+      const decrypted: DescryptedCallbackRequestBody = JSON.parse(
+        decryption(streamer.dinger_info?.callback_key, body.paymentResult)
+      );
+      const res = await tx.paymentTransaction.update({
+        where: { id: decrypted.merchantOrderId },
+        data: {
+          completed_at: new Date(),
+          status: decrypted.transactionStatus,
+          transaction_id: decrypted.transactionId,
+          donation: {
+            create: { user: { connect: { id: streamer_id } } },
+          },
+        },
+      });
+      return res;
+    });
+    return {
+      message: 'success',
+    };
+  }
   @UseGuards(CallbackValidationGuard)
   @HttpCode(200)
   @UseFilters(PaymentExceptionFilter)

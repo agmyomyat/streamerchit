@@ -40,6 +40,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
       createTransaction: this.donationResolver.createDonationTrasaction(),
       transactionStatus: this.donationResolver.getDonationTransactionStatus(),
       createPaymentSession: this.donationResolver.createPaymentSession(),
+      prebuilt_checkout: this.donationResolver.dingerPrebuiltCheckout(),
     });
     const payout = router({
       create: this.userResolver.createPayout(),
