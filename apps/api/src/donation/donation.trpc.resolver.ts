@@ -88,6 +88,14 @@ export class DonationTrpcResolver {
           },
           dinger_info.prebuilt_secret_key
         );
+        await this.donationService.createPaymentSession({
+          paymentProvider: 'Dinger',
+          paymentMethod: '',
+          streamerId: input.streamer_id,
+          donarName: input.donar_name,
+          donarMessage: input.message,
+          amount: input.amount,
+        });
         return { checkout_link: prebuilt_link };
       });
   }

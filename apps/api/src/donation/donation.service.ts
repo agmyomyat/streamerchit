@@ -7,6 +7,7 @@ import { PrismaService } from '../lib/prisma/prisma.service';
 import { PaymentService } from '../payment/payment.service';
 import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
+import { CreatePaymentTransactionParams } from '../payment/payment.interfaces';
 interface CreateDonationTransactionParams {
   paymentSessionToken: string;
   donarPhone?: string;
@@ -33,7 +34,21 @@ export class DonationService {
     private prisma: PrismaService,
     private paymentService: PaymentService
   ) {}
-
+  async createPaymentSession(params: Omit<CreatePaymentTransactionParams,'streamerName'>) {
+    const donationId = nanoid(16);
+    return this.prisma.paymentTransaction.create({
+      data: {
+        id: donationId,
+        doner_name: params.donarName,
+        memo: params.donarMessage,
+        total_amount: params.amount,
+        payment_provider: params.paymentProvider,
+        method_name: params.paymentMethod,
+        transaction_id: '',
+        user: { connect: { id: params.streamerId } },
+      },
+    });
+  }
   async getDonationSettings(userId: string) {
     const settings = await this.prisma.donationSetting.findFirstOrThrow({
       where: { user_id: userId },
