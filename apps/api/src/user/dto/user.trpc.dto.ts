@@ -45,9 +45,3 @@ export const CreatefileInLibraryInputZod = z.object({
   original_name: z.string(),
   size_in_byte: z.number(),
 });
-export const DingerPrebuiltCheckoutInputZod = z.object({
-  streamer_id: z.string(),
-  donar_name: z.string(),
-  message: z.string(),
-  amount: z.number().int().min(500, { message: 'minimum amount is 500 kyats' }),
-});
