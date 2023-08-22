@@ -34,6 +34,20 @@ export const EncryptPayloadParamsZod = z.object({
 export class EncryptPayloadParams extends createZodDto(
   EncryptPayloadParamsZod,
 ) {}
+export const EncryptPayloadForPrebuiltFormZod = z.object({
+  clientId: z.string(),
+  publicKey: z.string(),
+  items: ItemsZod,
+  customerName: z.string(),
+  totalAmount: z.number().int(),
+  merchantOrderId: z.string(),
+  merchantKey: z.string(),
+  projectName: z.string(),
+  merchantName: z.string(),
+});
+export class EncryptPayloadForPrebuiltForm extends createZodDto(
+  EncryptPayloadForPrebuiltFormZod
+) {}
 export const DingerPayDtoZod = z.object({
   formPayload: z.string(),
   paymentToken: z.string(),

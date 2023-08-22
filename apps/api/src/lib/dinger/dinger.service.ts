@@ -1,18 +1,21 @@
+import  queryString  from 'node:querystring';
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import HmacSHA256 from 'crypto-js/hmac-sha256';
 import {
   GetPaymentTokenDto,
   DingerPayDto,
   EncryptPayloadParams,
+  EncryptPayloadForPrebuiltForm,
 } from './dinger.dto';
-import * as NodeRSA from 'node-rsa';
+import NodeRSA from 'node-rsa';
 import { DingerPayRO } from './dinger.ro';
 import { PaymentTokenResponse } from './dinger.interface';
 import {
   ValidateArguments,
   ValidateReturnData,
 } from '../../decorators/zod-validation-decorators';
-
+import { DINGER_PUBLIC_KEY, PREBUILT_FORM_BASE_LINK } from './dinger.constants';
 @Injectable()
 export class DingerService {
   constructor(private httpService: HttpService) {}
@@ -34,12 +37,33 @@ export class DingerService {
     return token;
   }
   @ValidateArguments()
+  generateLinkForPrebuiltForm(
+    dto: EncryptPayloadForPrebuiltForm,
+    prebuilt_secret_key: string
+  ) {
+    const itemsJSON = JSON.stringify(dto.items);
+    const dataJSON = JSON.stringify({ ...dto, items: itemsJSON });
+
+    const pubKey =
+      '-----BEGIN PUBLIC KEY-----\n' +
+      `${DINGER_PUBLIC_KEY}\n` +
+      '-----END PUBLIC KEY-----';
+
+    const publicKey = new NodeRSA();
+    publicKey.importKey(pubKey, 'pkcs8-public');
+    publicKey.setOptions({ encryptionScheme: 'pkcs1' });
+    const payload = publicKey.encrypt(dataJSON, 'base64');
+    const hashValue = HmacSHA256(dataJSON, prebuilt_secret_key).toString();
+    const queries = queryString.stringify({payload,hashValue})
+    return `${PREBUILT_FORM_BASE_LINK}/?${queries}`
+  }
+  @ValidateArguments()
   encryptPayload(dto: EncryptPayloadParams) {
     const itemsJSON = JSON.stringify(dto.items);
     const dataJSON = JSON.stringify({ ...dto.payment, items: itemsJSON });
     const pubKey =
       '-----BEGIN PUBLIC KEY-----\n' +
-      `${dto.dinger.public_key}` +
+      `${dto.dinger.public_key}\n` +
       '-----END PUBLIC KEY-----';
     const publicKey = new NodeRSA();
     publicKey.importKey(pubKey, 'pkcs8-public');
