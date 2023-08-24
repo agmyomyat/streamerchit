@@ -28,7 +28,7 @@ export default async function RootLayout({
           <div className={cn(pacifico.className, 'fixed top-0 w-full z-10')}>
             <NavBar />
           </div>
-          <div className="mt-24">{children}</div>
+          <div className="">{children}</div>
         </Providers>
         <Toaster />
       </body>

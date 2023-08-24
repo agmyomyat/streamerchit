@@ -1,22 +1,39 @@
 import Link from 'next/link';
 import { Button } from '../ui/button';
 
+import Image from 'next/image';
 export default function HomeSectionOne() {
   return (
-    <section className="text-gray-600 body-font">
-      <div className="max-w-5xl pt-30 pb-24 mx-auto">
-        <h1 className="text-6xl text-center font-4 lh-6 ld-04 font-bold text-white mb-6">
-          Enable viewers to support you
-        </h1>
-        <h2 className="text-2xl font-4 font-semibold lh-6 ld-04 pb-11 text-gray-700 text-center">
-          Elevate the enjoyment of your streaming experience by fostering a
-          dynamic atmosphere where viewers actively contribute their support to
-          you.
-        </h2>
-        <div className="ml-6 text-center">
-          <Link href={'/sign-in'} passHref>
-            <Button>Join Now</Button>
-          </Link>
+    <section className="body-font ">
+      <div className="relative isolate overflow-hidden mx-auto">
+        <Image
+          src="https://cdn.streamerchit.com/hero-section-one.webp"
+          alt=""
+          unoptimized
+          fill={true}
+          className="absolute inset-0 -z-10 w-full object-cover opacity-60"
+        />
+        <div className="py-64 lg:pt-32 w-full h-full px-8 md:px-12 lg:px-32">
+          <div className="text-left">
+            <p className="mt-8 text-4xl font-semibold lg:text-6xl tracking-tighter ">
+              Enable viewers to support you
+              <span className="md:block ">
+                and connect with your supporters
+              </span>
+            </p>
+            <p className="max-w-md mt-4 text-xl text-slate-400">
+              Empower your viewers with StreamerChit, a platform that helps you
+              accept various payment methods in Myanmar.
+            </p>
+            <div className="flex flex-col items-center gap-3 mt-10 md:flex-row">
+              <Button className=" w-full h-12 px-4 py-2 text-sm font-semibold  rounded-lg bg-gradient-to-b  md:w-auto">
+                JOIN NOW
+              </Button>
+              <Button className=" w-full h-12 px-4 py-2 text-sm text-white font-semibold  rounded-lg bg-transparent hover:bg-transparent border border-blue-950 md:w-auto">
+                HOW IT WORKS
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
