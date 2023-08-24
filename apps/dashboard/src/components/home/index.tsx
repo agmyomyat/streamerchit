@@ -4,7 +4,7 @@ import { Button } from '../ui/button';
 import Image from 'next/image';
 export default function HomeSectionOne() {
   return (
-    <section className="body-font ">
+    <section>
       <div className="relative isolate overflow-hidden mx-auto">
         <Image
           src="https://cdn.streamerchit.com/hero-section-one.webp"
