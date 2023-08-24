@@ -19,11 +19,13 @@ export class UserService {
     };
   }
   async getTipPageSettings(user_id: string) {
-    const tipPage = await this.prisma.donationPage.findUniqueOrThrow({
-      where: { user_id },
+    const user = await this.prisma.user.findUniqueOrThrow({
+      where: { id: user_id },
+      include: { donation_page: true, dinger_info: true },
     });
-    const { id, user_id: _user_id, ...rest } = tipPage;
-    return rest;
+    const { id, user_id: _user_id, ...rest } = user.donation_page!;
+
+    return { ...rest, payment_configured: !!user.dinger_info };
   }
   async checkBalance(user_id: string) {
     return this.prisma.balance.findUniqueOrThrow({ where: { user_id } });
