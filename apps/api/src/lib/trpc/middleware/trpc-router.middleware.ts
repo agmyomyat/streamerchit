@@ -6,6 +6,7 @@ import { DonationTrpcResolver } from '../../../donation/donation.trpc.resolver';
 import { ReportService } from '../../report/report.service';
 import { UserTrpcResolver } from '../../../user/user.trpc.resolver';
 import { AuthjsAdapterResolver } from '../../../auth/authjs-adapter.trpc.resolver';
+import { SlAuthResolver } from '../../../auth/sl-auth.trpc.resolver';
 
 @Injectable()
 export class TrpcRouterMiddleware implements NestMiddleware {
@@ -15,10 +16,15 @@ export class TrpcRouterMiddleware implements NestMiddleware {
     private donationResolver: DonationTrpcResolver,
     private report: ReportService,
     private userResolver: UserTrpcResolver,
-    private authjsAdapter: AuthjsAdapterResolver
+    private authjsAdapter: AuthjsAdapterResolver,
+    private slAuthResolver: SlAuthResolver
   ) {}
   private setUpAppRouter() {
     const router = this.trpcService.use.router;
+    const streamlabs = router({
+      connectAccount: this.slAuthResolver.connectAccount(),
+      disconnectAccount: this.slAuthResolver.disconnectAccount(),
+    });
     const authjsAdapter = router({
       getUserWithAccessToken: this.authjsAdapter.getUserWithAccessToken(),
       createUser: this.authjsAdapter.createUser(),
@@ -66,6 +72,7 @@ export class TrpcRouterMiddleware implements NestMiddleware {
       donation: donation,
       user: user,
       authjsAdapter,
+      streamlabs,
     });
     return _router;
   }

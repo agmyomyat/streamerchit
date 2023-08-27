@@ -24,7 +24,7 @@ export function NavBar() {
         {session?.data?.user ? (
           <div className="flex gap-3">
             <div className={cn({ hidden: path.includes('dashboard') })}>
-              <Link href={'/dashboard/alertbox'} passHref>
+              <Link href={'/dashboard/account'} passHref>
                 <Button>Dashboard</Button>
               </Link>
             </div>

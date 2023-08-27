@@ -20,5 +20,7 @@ export const ENV_SCHEMA = z.object({
   R2_SECRET_KEY: z.string(),
   R2_BUCKET_NAME: z.string(),
   R2_PUBLIC_URL: z.string(),
+  SL_CLIENT_ID: z.string(),
+  SL_CLIENT_SECRET: z.string(),
 });
 export type ENV_VARS = z.infer<typeof ENV_SCHEMA>;

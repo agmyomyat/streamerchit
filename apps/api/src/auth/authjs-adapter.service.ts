@@ -17,9 +17,16 @@ export class AuthjsAdapterService {
   async getUserWithAccessToken(email: string) {
     const user = await this.prisma.user.findUniqueOrThrow({
       where: { email },
+      include: {
+        accounts: { where: { user: { email }, provider: 'streamlabs' } },
+      },
     });
     const at = this.jwt.sign({ email, id: user.id }, { expiresIn: '15m' });
-    return { user, sc_access_token: at };
+    return {
+      user,
+      sc_access_token: at,
+      streamlabs_connected: !!user.accounts.length,
+    };
   }
   createUser(data: Prisma.UserCreateInput, invite_to_register_id: string) {
     const page_handle = nanoid(10);

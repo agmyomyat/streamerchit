@@ -1,14 +1,53 @@
 'use client';
+import { StreamLabsSvg } from '@/components/icons/streamlabs-logo';
 import { useSCSession } from '@/lib/provider/session-checker';
-
+import { SLConnectButton } from './components/sl-connect-button';
+import { useEffect } from 'react';
+import { isProduction } from '@/utils/is-production';
+import { windowRedirect } from '@/utils/window-redirect';
+import { SLDisconnectButton } from './components/sl-disconnect-button';
+import { trpcReact } from '@/lib/trpc/trpc-react';
+import { GlobalLoader } from '@/global-stores/global-loading';
 export default function AccountPage() {
-  const { data } = useSCSession();
+  const { data, update } = useSCSession();
+  const { mutate: disconnectSLMutate } =
+    trpcReact.streamlabs.disconnectAccount.useMutation();
+  const connect = () => {
+    if (!isProduction()) {
+      window.location.href = `https://streamlabs.com/api/v2.0/authorize?client_id=${process.env.NEXT_PUBLIC_SL_CLIENT_ID}&redirect_uri=https://streamerchit.com/apps/sl/callback&scope=donations.read+donations.create+alerts.create&response_type=code&state=${data?.user.access_token}`;
+    }
+  };
   return (
     <div>
       <h1 className="text-3xl mb-7 font-bold ">Personal Infomation</h1>
       <div className="flex flex-col gap-5">
         <PersonalInfo k="Name" v={data?.user.name || ''} />
         <PersonalInfo k="Email" v={data?.user.email || ''} />
+      </div>
+      <div className="mt-12">
+        <StreamLabsSvg />
+        <div className="mt-8">
+          {data?.user.streamlabs_connected ? (
+            <SLDisconnectButton
+              onClick={() => {
+                GlobalLoader.set(true);
+                disconnectSLMutate(
+                  { access_token: data.user.access_token || '' },
+                  {
+                    onSuccess: () => {
+                      update();
+                    },
+                    onSettled: () => {
+                      GlobalLoader.set(false);
+                    },
+                  }
+                );
+              }}
+            />
+          ) : (
+            <SLConnectButton onClick={connect} />
+          )}
+        </div>
       </div>
     </div>
   );

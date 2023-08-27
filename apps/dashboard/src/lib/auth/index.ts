@@ -25,6 +25,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.image = token.picture;
         session.user.access_token = token.access_token;
+        session.user.streamlabs_connected = token.streamlabs_connected;
       }
       return session;
     },
@@ -43,10 +44,11 @@ export const authOptions: NextAuthOptions = {
         email: data.user.email,
         picture: data.user.image,
         access_token: data.sc_access_token,
+        streamlabs_connected: data.streamlabs_connected,
       };
     },
     redirect() {
-      return '/dashboard/alertbox';
+      return '/dashboard/account';
     },
   },
 };

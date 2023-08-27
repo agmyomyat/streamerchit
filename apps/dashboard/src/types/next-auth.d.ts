@@ -8,6 +8,7 @@ declare module 'next-auth/jwt' {
     id: UserId;
     username?: string | null;
     access_token: string | null;
+    streamlabs_connected: boolean;
   }
 }
 
@@ -17,6 +18,7 @@ declare module 'next-auth' {
       id: UserId;
       username?: string | null;
       access_token?: string | null;
+      streamlabs_connected: boolean;
     };
   }
 }

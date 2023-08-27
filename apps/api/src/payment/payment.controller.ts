@@ -22,13 +22,16 @@ import { AlertboxService } from '../alert-box/alert-box.service';
 import { PrismaService } from '../lib/prisma/prisma.service';
 import { decryption } from './payment-utils/aes-ecb';
 import { DingerCallbackRequestBodyDto } from './dto/payment.dto';
+import { StreamlabsService } from '../lib/streamlabs/streamlabs.service';
+import { nanoid } from 'nanoid';
 
 @Controller('payment')
 export class PaymentController {
   constructor(
     private prisma: PrismaService,
     private paymentService: PaymentService,
-    private alertBox: AlertboxService
+    private alertBox: AlertboxService,
+    private slService: StreamlabsService
   ) {}
   @HttpCode(200)
   @UseFilters(PaymentExceptionFilter)
@@ -37,30 +40,46 @@ export class PaymentController {
     @Param('streamer_id') streamer_id: string,
     @Body() body: DingerCallbackRequestBodyDto
   ) {
-    await this.prisma.$transaction(async (tx) => {
-      const streamer = await tx.user.findUniqueOrThrow({
-        where: { id: streamer_id },
-        include: { dinger_info: true },
-      });
-      if (!streamer.dinger_info?.callback_key) {
-        throw new HttpException('Streamer dinger credential not found', 404);
-      }
-      const decrypted: DescryptedCallbackRequestBody = JSON.parse(
-        decryption(streamer.dinger_info?.callback_key, body.paymentResult)
-      );
-      const res = await tx.paymentTransaction.update({
-        where: { id: decrypted.merchantOrderId },
-        data: {
-          completed_at: new Date(),
-          status: decrypted.transactionStatus,
-          transaction_id: decrypted.transactionId,
-          donation: {
-            create: { user: { connect: { id: streamer_id } } },
-          },
-        },
-      });
-      return res;
+    const streamer = await this.prisma.user.findUniqueOrThrow({
+      where: { id: streamer_id },
+      include: {
+        dinger_info: true,
+        // at this point  streamlabs account should be connected
+        accounts: { where: { provider: 'streamlabs' } },
+      },
     });
+    if (!streamer.dinger_info?.callback_key) {
+      throw new HttpException('Streamer dinger credential not found', 404);
+    }
+    const decrypted: DescryptedCallbackRequestBody = JSON.parse(
+      decryption(streamer.dinger_info?.callback_key, body.paymentResult)
+    );
+    const res = await this.prisma.paymentTransaction.update({
+      where: { id: decrypted.merchantOrderId },
+      data: {
+        completed_at: new Date(),
+        status: decrypted.transactionStatus,
+        transaction_id: decrypted.transactionId,
+        donation: {
+          create: { user: { connect: { id: streamer_id } } },
+        },
+      },
+    });
+    this.alertBox.donationAlertEmit(res.user_id, {
+      amount: res.total_amount,
+      message: res.memo,
+      name: res.doner_name,
+    });
+    await this.slService.createDonation(
+      {
+        name: res.doner_name,
+        amount: res.total_amount,
+        currency: 'USD',
+        identifier: nanoid(),
+        message: res.memo,
+      },
+      streamer.accounts[0].access_token!
+    );
     return {
       message: 'success',
     };

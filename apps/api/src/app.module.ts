@@ -18,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { S3ClientModule } from './lib/s3-client/s3-client.module';
 import { PayoutModule } from './payout/payout.module';
+import { StreamlabsModule } from './lib/streamlabs/streamlabs.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { PayoutModule } from './payout/payout.module';
     FileModule,
     S3ClientModule,
     PayoutModule,
+    StreamlabsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

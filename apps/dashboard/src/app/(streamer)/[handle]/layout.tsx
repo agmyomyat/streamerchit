@@ -23,7 +23,7 @@ export default async function StreamerLayout({
       name={streamer.name || ''}
       streamerId={streamer.streamer_id || ''}
     >
-      {children}
+      <div className="mt-28">{children}</div>
     </TipePageProvider>
   );
 }
