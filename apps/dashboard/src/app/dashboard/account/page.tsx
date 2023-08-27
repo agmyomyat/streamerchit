@@ -14,8 +14,9 @@ export default function AccountPage() {
     trpcReact.streamlabs.disconnectAccount.useMutation();
   const connect = () => {
     if (!isProduction()) {
-      window.location.href = `https://streamlabs.com/api/v2.0/authorize?client_id=${process.env.NEXT_PUBLIC_SL_CLIENT_ID}&redirect_uri=https://streamerchit.com/apps/sl/callback&scope=donations.read+donations.create+alerts.create&response_type=code&state=${data?.user.access_token}`;
+      return (window.location.href = `https://streamlabs.com/api/v2.0/authorize?client_id=${process.env.NEXT_PUBLIC_SL_CLIENT_ID}&redirect_uri=http://localhost:3333/apps/sl/callback&scope=donations.read+donations.create+alerts.create&response_type=code&state=${data?.user.access_token}`);
     }
+    return (window.location.href = `https://streamlabs.com/api/v2.0/authorize?client_id=${process.env.NEXT_PUBLIC_SL_CLIENT_ID}&redirect_uri=https://api.streamerchit.com/apps/sl/callback&scope=donations.read+donations.create+alerts.create&response_type=code&state=${data?.user.access_token}`);
   };
   return (
     <div>
