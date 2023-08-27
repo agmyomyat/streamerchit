@@ -42,10 +42,3 @@ export class StreamlabsService {
     return create_donation as any;
   }
 }
-// {
-
-// 	token_type: 'Bearer',
-// 	expires_in: 631152000,
-//       access_token:'',
-//       refresh_token:''
-//       }
