@@ -22,7 +22,7 @@ export class StreamlabsService {
       grant_type: 'authorization_code',
       client_id,
       client_secret,
-      redirect_uri: 'https://streamerchit.com/apps/sl/callback',
+      redirect_uri: 'https://api.streamerchit.com/apps/sl/callback',
       code,
     });
     return token.data as SLCredentialsRO;
