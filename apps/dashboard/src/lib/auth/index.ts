@@ -1,7 +1,7 @@
 import { NextAuthOptions, getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { adapter } from './adapter';
-import { client } from '../trpc';
+import { client } from '../trpc/authjs-adapter-client';
 
 export const authOptions: NextAuthOptions = {
   adapter: adapter,

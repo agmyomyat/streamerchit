@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { StreamlabsModule } from '../lib/streamlabs/streamlabs.module';
 import { StreamLabsController } from './sl-callback.controller';
 import { SlAuthResolver } from './sl-auth.trpc.resolver';
+import { AuthjsAdapterTrpcMiddleware } from './authjs-adapter.trpc.middleware';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { SlAuthResolver } from './sl-auth.trpc.resolver';
     AuthjsAdapterService,
     AuthjsAdapterResolver,
     SlAuthResolver,
+    AuthjsAdapterTrpcMiddleware,
   ],
   exports: [AuthjsAdapterResolver, AuthService, SlAuthResolver],
   controllers: [StreamLabsController],

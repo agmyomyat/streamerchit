@@ -2,14 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { TrpcService } from '../lib/trpc/trpc.service';
 import { z } from 'zod';
 import { AuthjsAdapterService } from './authjs-adapter.service';
+import { AuthjsAdapterTrpcMiddleware } from './authjs-adapter.trpc.middleware';
 
 @Injectable()
 export class AuthjsAdapterResolver {
   constructor(
     private t: TrpcService,
-    private authjsAdapterService: AuthjsAdapterService
+    private authjsAdapterService: AuthjsAdapterService,
+    private authjsAdapterMiddleware: AuthjsAdapterTrpcMiddleware
   ) {}
-  private authorizedProcedure = this.t.use.procedure;
+  private authorizedProcedure = this.t.use.procedure.use(
+    this.authjsAdapterMiddleware.auth()
+  );
   getUserWithAccessToken() {
     return this.authorizedProcedure
       .input(z.object({ email: z.string() }))

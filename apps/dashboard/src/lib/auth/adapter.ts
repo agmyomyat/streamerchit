@@ -1,5 +1,4 @@
-import { cookies } from 'next/headers';
-import { client } from '../trpc';
+import { client } from '../trpc/authjs-adapter-client';
 import { NextAuthOptions } from 'next-auth';
 
 export const adapter: NextAuthOptions['adapter'] = {
