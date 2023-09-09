@@ -78,12 +78,12 @@ export function SidebarContent({ className, routePath }: SidebarContentProps) {
                 Tip History
               </Button>
             </Link>
-            <Link href="/dashboard/merchstore">
+            {/* <Link href="/dashboard/merchstore">
               <Button variant={'ghost'} className="w-full justify-start">
                 <Shirt className="mr-2 w-4 h-4" />
                 Merch Store
               </Button>
-            </Link>
+            </Link> */}
           </div>
         </div>
       </div>
