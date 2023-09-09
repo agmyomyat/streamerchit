@@ -26,12 +26,11 @@ export default function HomeSectionOne() {
               accept various payment methods in Myanmar.
             </p>
             <div className="flex flex-col items-center gap-3 mt-10 md:flex-row">
-              <Button className=" w-full h-12 px-4 py-2 text-sm font-semibold  rounded-lg bg-gradient-to-b  md:w-auto">
-                JOIN NOW
-              </Button>
-              <Button className=" w-full h-12 px-4 py-2 text-sm text-white font-semibold  rounded-lg bg-transparent hover:bg-transparent border border-blue-950 md:w-auto">
-                HOW IT WORKS
-              </Button>
+              <Link href={'/sign-in'}>
+                <Button className=" w-full h-12 px-4 py-2 text-sm font-semibold  rounded-lg bg-gradient-to-b  md:w-auto">
+                  JOIN NOW
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
