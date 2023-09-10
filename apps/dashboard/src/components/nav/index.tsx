@@ -6,9 +6,21 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSCSession } from '@/lib/provider/session-checker';
 import { scSignOut } from '@/lib/auth/sc-sign-out';
+import { useEffect } from 'react';
+import { TopBarMessageState } from '@/global-stores/top-bar-noti';
+import { PaymentSetupWarning } from '../payment-warning';
 export function NavBar() {
   const session = useSCSession();
   const path = usePathname();
+  useEffect(() => {
+    if (!session.data?.user) return;
+    if (!session.data?.user.payment_configured) {
+      TopBarMessageState.set(<PaymentSetupWarning />);
+    }
+    return () => {
+      TopBarMessageState.set(null);
+    };
+  }, [session]);
   return (
     <div className={'w-full h-16 flex items-center shadow-sm shadow-gray-600'}>
       <div className="flex sm:mx-16 justify-between w-full">

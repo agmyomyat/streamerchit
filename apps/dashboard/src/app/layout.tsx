@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 import { Pacifico } from 'next/font/google';
 import { cn } from '@/utils';
+import { TopMessageBar } from '@/components/top-message-bar';
 const pacifico = Pacifico({ subsets: ['latin'], weight: '400' });
 export const revalidate = 0;
 
@@ -25,10 +26,13 @@ export default async function RootLayout({
     <html lang="en" className="dark">
       <body className={inter.className}>
         <Providers>
-          <div className={cn(pacifico.className, 'fixed top-0 w-full z-10')}>
-            <NavBar />
+          <div className={'fixed top-0 w-full z-10'}>
+            <TopMessageBar />
+            <div className={cn(pacifico.className)}>
+              <NavBar />
+            </div>
           </div>
-          <div className="">{children}</div>
+          <div className="pt-[64px]">{children}</div>
         </Providers>
         <Toaster />
       </body>
