@@ -1,9 +1,20 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import {
+  Catch,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Query,
+  Res,
+  UseFilters,
+  UseGuards,
+} from '@nestjs/common';
 import { StreamlabsService } from '../lib/streamlabs/streamlabs.service';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../lib/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { StreamlabsCallbackExceptionFilter } from '../lib/streamlabs/streamlabs.filter';
 
 @Controller('apps/sl')
 export class StreamLabsController {
@@ -15,6 +26,7 @@ export class StreamLabsController {
   ) {}
 
   @Get('callback')
+  @UseFilters(StreamlabsCallbackExceptionFilter)
   async callback(
     @Query('code') code: string,
     @Query('state') access_token: string,

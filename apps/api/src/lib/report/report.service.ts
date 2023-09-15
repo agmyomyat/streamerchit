@@ -9,6 +9,13 @@ export class ReportService {
   reportTrpcError(dto: TrpcErrorReportDto) {
     return this.axiom.ingestEvents(this.dataset_name, dto);
   }
+  reportHttpException(dto: {
+    Exception: HttpException;
+    requestBody?: string;
+    requestQuery?: string;
+  }) {
+    return this.axiom.ingestEvents(this.dataset_name, dto);
+  }
   reportPaymentException(dto: {
     Exception: HttpException;
     requestBody: string;
