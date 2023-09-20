@@ -84,6 +84,7 @@ export class PaymentController {
       message: 'success',
     };
   }
+  // this callback is for dinger account creation fee payment.
   @UseGuards(CallbackValidationGuard)
   @HttpCode(200)
   @UseFilters(PaymentExceptionFilter)
