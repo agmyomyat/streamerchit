@@ -1,4 +1,3 @@
-import { StreamLabsSvg } from '@/components/icons/streamlabs-logo';
 import { DonationShowCase } from './donation-showcase/donation-showcase';
 
 export function HomeSectionTwo() {
@@ -10,7 +9,7 @@ export function HomeSectionTwo() {
             <p className="mt-8 text-2xl font-semibold lg:text-4xl tracking-tighter ">
               How It Works
             </p>
-            <div className="flex flex-col justify-center items-center gap-20 md:gap-36  mt-10 md:flex-row">
+            <div className="flex flex-col justify-center items-center gap-10  md:gap-36  mt-10 md:flex-row">
               <DonationShowCase />
               <div className="max-w-full w-[500px] gap-5 flex flex-col">
                 <div className="flex gap-3">

@@ -1,17 +1,16 @@
-const GIF = 'https://media.giphy.com/media/YJjvTqoRFgZaM/giphy.gif';
-const JUMPY_KELVIN =
-  'https://cdn.streamlabs.com/library/giflibrary/jumpy-kevin.webm';
+import Image from 'next/image';
+
+const CURIOUS_OWL =
+  'https://media.tenor.com/EXevW7XQUc4AAAAj/timothy-winchester-littlest-friends.gif';
 export function DonationShowCase() {
   return (
-    <div className=" flex flex-col h-[200px] items-center">
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        src={JUMPY_KELVIN}
+    <div className=" flex flex-col gap-2 items-center">
+      <Image
+        src={CURIOUS_OWL}
         width={200}
         height={300}
+        alt={'Owl'}
+        unoptimized
       />
       <HighlightedText
         text="Mg Mg Donated 10000 Kyats"
