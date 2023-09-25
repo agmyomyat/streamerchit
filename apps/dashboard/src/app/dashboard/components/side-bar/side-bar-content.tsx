@@ -31,16 +31,7 @@ export function SidebarContent({ className, routePath }: SidebarContentProps) {
                 Tip Activities
               </Button>
             </Link>
-            <Link href="/dashboard/account">
-              <Button
-                variant={routePath.includes('account') ? 'secondary' : 'ghost'}
-                className="w-full justify-start"
-              >
-                <User2 className="mr-2 w-4 h-4" />
-                Account
-              </Button>
-            </Link>
-            {/* <Link href="/dashboard/alertbox">
+            <Link href="/dashboard/alertbox">
               <Button
                 variant={routePath.includes('alertbox') ? 'secondary' : 'ghost'}
                 className="w-full justify-start"
@@ -48,7 +39,7 @@ export function SidebarContent({ className, routePath }: SidebarContentProps) {
                 <Boxes className="mr-2 h-4 w-4" />
                 Alert Box
               </Button>
-            </Link> */}
+            </Link>
             <Link href="/dashboard/tip-page">
               <Button
                 variant={routePath.includes('tip-page') ? 'secondary' : 'ghost'}
@@ -76,6 +67,15 @@ export function SidebarContent({ className, routePath }: SidebarContentProps) {
               >
                 <History className="mr-2 w-4 h-4" />
                 Tip History
+              </Button>
+            </Link>
+            <Link href="/dashboard/account">
+              <Button
+                variant={routePath.includes('account') ? 'secondary' : 'ghost'}
+                className="w-full justify-start"
+              >
+                <User2 className="mr-2 w-4 h-4" />
+                Account
               </Button>
             </Link>
             {/* <Link href="/dashboard/merchstore">
