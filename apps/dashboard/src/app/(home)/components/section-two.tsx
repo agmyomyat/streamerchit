@@ -15,14 +15,13 @@ export function HomeSectionTwo() {
               <div className="max-w-full w-[500px] gap-5 flex flex-col">
                 <div className="flex gap-3">
                   <h1 className="text-lg md:text-2xl font-semibold">
-                    Connect With
+                    Accept Donations
                   </h1>
-                  <StreamLabsSvg />
                 </div>
                 <p className=" whitespace-pre-wrap text-left">
-                  We only focus on payments and donation page for viewers,
-                  leaving the rest to Streamlabs for you to make the most of its
-                  impressive features.
+                  Accept contributions from your viewers and showcase them
+                  during your live broadcasts. Personalize the appearance of
+                  alerts by configuring a wide range of available settings.
                 </p>
               </div>
             </div>
