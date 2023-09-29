@@ -27,6 +27,7 @@ model User{
   donation_page             DonationPage?
   file_library              FileLibrary?
   dinger_info               DingerInfo?
+  payment_registration      PaymentRegistration?
 }
 model Account {
   id                 String  @id @default(cuid())
@@ -57,6 +58,15 @@ model DingerInfo{
   user            User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   prebuilt_secret_key  String
   callback_key         String
+}
+model PaymentRegistration{
+  id                  String  @id         @default(cuid())
+  user_id             String  @unique
+  name                String
+  email               String 
+  fb_link             String
+  status              String
+  user                User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 model Session {
   id           String   @id @default(cuid())
