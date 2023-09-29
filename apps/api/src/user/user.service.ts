@@ -41,4 +41,15 @@ export class UserService {
     const { id, user_id: _user_id, ...rest } = updatedTipPage;
     return rest;
   }
+  async registerPayment(
+    user_id: string,
+    data: Omit<
+      Prisma.PaymentRegistrationCreateInput,
+      'id' | 'user' | 'user_id' | 'status'
+    >
+  ) {
+    return this.prisma.paymentRegistration.create({
+      data: { ...data, status: 'PENDING', user: { connect: { id: user_id } } },
+    });
+  }
 }

@@ -6,6 +6,7 @@ import {
   GetDonationHistoryInputZod,
   GetStreamerInfoInputZod,
   ListPayoutHistoryInputZod,
+  RegisterPaymentInputZod,
   UpdateDonationSettingsInputZod,
   UpdateTipPageSettingsInputZod,
 } from './dto/user.trpc.dto';
@@ -119,5 +120,12 @@ export class UserTrpcResolver {
     return this.protectedProcedure.query(async ({ ctx }) => {
       return this.userService.checkBalance(ctx.id);
     });
+  }
+  registerPayment() {
+    return this.protectedProcedure
+      .input(RegisterPaymentInputZod)
+      .mutation(async ({ ctx, input }) => {
+        return this.userService.registerPayment(ctx.id, input);
+      });
   }
 }

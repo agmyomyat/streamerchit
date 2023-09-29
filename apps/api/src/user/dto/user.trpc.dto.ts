@@ -45,3 +45,9 @@ export const CreatefileInLibraryInputZod = z.object({
   original_name: z.string(),
   size_in_byte: z.number(),
 });
+export const RegisterPaymentInputZod = z.object({
+  name: z.string(),
+  email: z.string(),
+  phone: z.string(),
+  fb_link: z.string(),
+});
