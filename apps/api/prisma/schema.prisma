@@ -64,6 +64,7 @@ model PaymentRegistration{
   user_id             String  @unique
   name                String
   email               String 
+  phone               String
   fb_link             String
   status              String
   user                User @relation(fields: [user_id], references: [id], onDelete: Cascade)
