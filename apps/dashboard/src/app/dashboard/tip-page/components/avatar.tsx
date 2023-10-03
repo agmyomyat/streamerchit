@@ -4,7 +4,7 @@ interface TipPageAvatarProps {
 }
 export function TipPageAvatar({ url }: TipPageAvatarProps) {
   return (
-    <Avatar className="w-20 h-20">
+    <Avatar className="w-32 h-32">
       <AvatarImage src={url} />
       <AvatarFallback>No Avatar</AvatarFallback>
     </Avatar>
