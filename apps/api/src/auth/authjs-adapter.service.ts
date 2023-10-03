@@ -20,6 +20,7 @@ export class AuthjsAdapterService {
       include: {
         accounts: { where: { user: { email }, provider: 'streamlabs' } },
         dinger_info: true,
+        payment_registration: true,
       },
     });
     const at = this.jwt.sign({ email, id: user.id }, { expiresIn: '15m' });
@@ -27,7 +28,7 @@ export class AuthjsAdapterService {
       user,
       sc_access_token: at,
       streamlabs_connected: !!user.accounts.length,
-      payment_configured: !!user.dinger_info,
+      payment_configured: user.payment_registration?.status || null,
     };
   }
   createUser(data: Prisma.UserCreateInput, invite_to_register_id: string) {
