@@ -9,7 +9,7 @@ declare module 'next-auth/jwt' {
     username?: string | null;
     access_token: string | null;
     streamlabs_connected: boolean;
-    payment_configured: boolean;
+    payment_configured: string | null;
   }
 }
 
@@ -20,7 +20,7 @@ declare module 'next-auth' {
       username?: string | null;
       access_token?: string | null;
       streamlabs_connected: boolean;
-      payment_configured: boolean;
+      payment_configured: string | null;
     };
   }
 }

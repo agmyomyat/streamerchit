@@ -7,18 +7,24 @@ import { usePathname } from 'next/navigation';
 import { useSCSession } from '@/lib/provider/session-checker';
 import { scSignOut } from '@/lib/auth/sc-sign-out';
 import { useEffect } from 'react';
-import { TopBarMessageState } from '@/global-stores/top-bar-noti';
-import { PaymentSetupWarning } from '../payment-warning';
+import { paymentRegisterationWarningState } from '@/global-stores/top-bar-noti';
 export function NavBar() {
   const session = useSCSession();
   const path = usePathname();
   useEffect(() => {
     if (!session.data?.user) return;
     if (!session.data?.user.payment_configured) {
-      TopBarMessageState.set(<PaymentSetupWarning />);
+      paymentRegisterationWarningState.set('ActivatePaymentRegisteration');
+      // TopBarMessageState.set('hi');
+      return;
+    }
+    if (session.data?.user.payment_configured === 'PENDING') {
+      paymentRegisterationWarningState.set('PendingPaymentRegistration');
+      // TopBarMessageState.set('not hi');
+      return;
     }
     return () => {
-      TopBarMessageState.set(null);
+      paymentRegisterationWarningState.set(null);
     };
   }, [session]);
   return (
