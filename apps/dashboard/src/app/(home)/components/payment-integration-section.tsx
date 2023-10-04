@@ -49,14 +49,15 @@ export function PaymentIntegrationSection() {
   );
 }
 type PaymentLogosDataType = { slug: string; alt: string }[];
-const PAYMENT_LOGOS_CDN_LINK = 'https://cdn.streamerchit.com/bank_logos';
+const PAYMENT_LOGOS_CDN_LINK = 'https://cdn.streamerchit.com/bank_logos_mono';
 function generatePaymentLogosLink(slug: string) {
   return `${PAYMENT_LOGOS_CDN_LINK}/${slug}`;
 }
 const PAYMENT_LOGOS: PaymentLogosDataType = [
-  { slug: 'aya.png', alt: 'Aya Bank Logo' },
+  { slug: 'abank.png', alt: 'abank Logo' },
+  { slug: 'ayapay.png', alt: 'Aya pay Logo' },
   { slug: 'kbz.png', alt: 'Kbz Bank Logo' },
-  { slug: 'cbpay.png', alt: 'Cb pay logo' },
+  { slug: 'cbpay-inactive.png', alt: 'Cb pay logo' },
   { slug: 'mpu.png', alt: 'Mpu logo' },
   { slug: 'mab.png', alt: 'Mab logo' },
   { slug: 'mytelpay.png', alt: 'Mytelpay logo' },
@@ -64,9 +65,8 @@ const PAYMENT_LOGOS: PaymentLogosDataType = [
   { slug: 'wavepay.png', alt: 'Wavepay logo' },
   { slug: 'mpitesan.png', alt: 'mpitesan logo' },
   { slug: 'saisaipay.png', alt: 'saisaipay logo' },
-  { slug: 'mptpay_logo.webp', alt: 'mptpay logo' },
-  { slug: 'mastercard.png', alt: 'Mastercard logo' },
+  { slug: 'mastercard-inactive.png', alt: 'Mastercard logo' },
   { slug: 'uab.png', alt: 'Uab logo' },
-  { slug: 'visa.png', alt: 'Visa logo' },
-  { slug: 'jcb-active.png', alt: 'jcb logo' },
+  { slug: 'visa-inactive.png', alt: 'Visa logo' },
+  { slug: 'jcb-inactive.png', alt: 'jcb logo' },
 ];
