@@ -3,6 +3,7 @@ import HomeSectionOne from '@/components/home';
 import React from 'react';
 import { HomeSectionTwo } from './components/section-two';
 import { PaymentIntegrationSection } from './components/payment-integration-section';
+import { Footer } from '@/components/footer';
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <div>
         <PaymentIntegrationSection />
       </div>
+      <Footer />
     </main>
   );
 }
