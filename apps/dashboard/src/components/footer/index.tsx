@@ -2,7 +2,7 @@ import { Phone } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="px-48 bg-slate-900 mt-auto py-3 bg-dark">
+    <footer className="px-3 sm:px-48 bg-slate-900 mt-auto py-3 bg-dark">
       <div className="flex justify-between ">
         <p className="text-light">
           Made with ♥ by{' '}
