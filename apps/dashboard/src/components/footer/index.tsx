@@ -1,4 +1,4 @@
-import { Phone } from 'lucide-react';
+import { Facebook, Github, Phone } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -8,7 +8,7 @@ export function Footer() {
           Made with ♥ by{' '}
           <a
             className="text-blue-300"
-            href="https://facebook.com/urnotalone2"
+            href="https://facebook.com/agmmdotdev"
             target="_blank"
             rel="noreferrer"
           >
@@ -16,8 +16,22 @@ export function Footer() {
           </a>
         </p>
         <div className="flex gap-3">
+          <a
+            href="https://facebook.com/agmmdotdev"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Facebook />
+          </a>
+          <a
+            href="https://github.com/agmyomyat"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Github />
+          </a>
           <Phone />
-          <a href="tel:+959778711777">09778711777</a>
+          <a href="tel:+959778711777">+959778711777</a>
         </div>
       </div>
     </footer>
