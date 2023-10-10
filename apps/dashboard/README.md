@@ -10,7 +10,7 @@ StreamerChit is a donation platform designed to support Myanmar streamers. It pr
 - Backend: Nestjs.
 - Frontend: nextjs and react
 
-## Consider sponsering this project
+## Consider sponsoring this project
 
 My goal is to help viewers support streamers. This platform does not take a cut from streamers, nor is there any fee. If you like this project and want to support it, you can reach out to me for donations.
 
