@@ -2,8 +2,8 @@ import { Facebook, Github, Phone } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="px-3 sm:px-48 bg-slate-900 mt-auto py-3 bg-dark">
-      <div className="flex justify-between ">
+    <footer className="text-sm sm:text-base px-3 lg:px-48 bg-slate-900 mt-auto py-3 bg-dark">
+      <div className="flex flex-col gap-5 sm:gap-0 sm:flex-row justify-between ">
         <p className="text-light">
           Made with ♥ by{' '}
           <a

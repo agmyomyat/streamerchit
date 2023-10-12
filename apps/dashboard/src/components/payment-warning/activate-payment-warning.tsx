@@ -51,8 +51,9 @@ export function ActivatePaymentRegistrationWarning() {
   });
   return (
     <div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-center gap-2">
         <h1>Set up payment to start accepting donations.</h1>
+
         <Dialog
           open={registerFormOpen}
           onOpenChange={(prev) => setRegisterFormOpen(!!prev)}

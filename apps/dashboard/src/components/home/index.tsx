@@ -11,7 +11,7 @@ export default function HomeSectionOne() {
           alt=""
           unoptimized
           fill={true}
-          className="absolute inset-0 -z-10 w-full object-cover opacity-60"
+          className="absolute inset-0 -z-10 w-full object-cover opacity-30"
         />
         <div className="py-64 lg:pt-32 w-full h-full px-8 md:px-12 lg:px-32">
           <div className="text-left">
@@ -21,7 +21,7 @@ export default function HomeSectionOne() {
                 and connect with your supporters
               </span>
             </p>
-            <p className="max-w-md mt-4 text-xl text-slate-400">
+            <p className="max-w-md mt-4 text-xl text-slate-300">
               Empower your viewers with StreamerChit, a platform that helps you
               accept various payment methods in Myanmar.
             </p>
