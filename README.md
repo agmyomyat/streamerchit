@@ -6,6 +6,7 @@ StreamerChit is a donation platform designed to support Myanmar streamers. It pr
 - Donation processing for Myanmar streamers.
 - Accepts payments through 16 different payment methods.
 - Integrate with OBS or XSplit using a browser source.
+- Integrate with Streamlabs account and use the full features of streamlabs
 ## Stacks
 - Backend: Nestjs.
 - Frontend: nextjs and react
