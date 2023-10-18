@@ -58,7 +58,6 @@ export class PaymentController {
       where: { id: streamer_id },
       include: {
         dinger_info: true,
-        // at this point  streamlabs account should be connected
         accounts: { where: { provider: 'streamlabs' } },
       },
     });
