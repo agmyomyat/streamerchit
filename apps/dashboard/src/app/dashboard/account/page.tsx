@@ -8,6 +8,7 @@ import { windowRedirect } from '@/utils/window-redirect';
 import { SLDisconnectButton } from './components/sl-disconnect-button';
 import { trpcReact } from '@/lib/trpc/trpc-react';
 import { GlobalLoader } from '@/global-stores/global-loading';
+import { StreamlabsNote } from './components/streamlabs-account-note';
 export default function AccountPage() {
   const { data, update } = useSCSession();
   const { mutate: disconnectSLMutate } =
@@ -27,7 +28,10 @@ export default function AccountPage() {
       </div>
       <div className="mt-12">
         <StreamLabsSvg />
-        <div className="mt-8">
+        <div className="py-6">
+          <StreamlabsNote />
+        </div>
+        <div className="mt-2">
           {data?.user.streamlabs_connected ? (
             <SLDisconnectButton
               onClick={() => {

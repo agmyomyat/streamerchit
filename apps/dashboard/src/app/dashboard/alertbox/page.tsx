@@ -17,6 +17,7 @@ import { extractFileKeyAndExtFromUrl } from '@/utils/extract-file-key-from-url';
 import { uploadS3PresignedFile } from '@/lib/upload-file';
 import { isFileBiggerThan } from '@/utils/is-file-bigger-than';
 import { MEDIA_UPLOAD_SIZE_LIMIT } from '@/constants/media-file-upload-size-limit';
+import { AlertBoxNote } from './components/alert-box-note';
 function testDonation(token?: string | null) {
   if (!token) throw new Error('No token provided');
   return fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/alertbox/test`, {
@@ -205,6 +206,7 @@ export default function Page() {
   if (!data) return null;
   return (
     <div className="flex flex-col gap-10 w-full py-10 mr-40">
+      <AlertBoxNote />
       <div>
         <h1 className="text-2xl font-bold mb-10">Alert Box</h1>
         <p className="text-slate-400 mb-5">
