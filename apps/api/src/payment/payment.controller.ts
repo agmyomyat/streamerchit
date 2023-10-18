@@ -35,6 +35,20 @@ export class PaymentController {
   ) {}
   @HttpCode(200)
   @UseFilters(PaymentExceptionFilter)
+  @Post('test')
+  async test() {
+    const streamer = await this.prisma.user.findUniqueOrThrow({
+      where: { id: 'KvrjdyWPhrQdJodqnmRD' },
+      include: {
+        dinger_info: true,
+        // at this point  streamlabs account should be connected
+        accounts: { where: { provider: 'streamlabs' } },
+      },
+    });
+    return streamer;
+  }
+  @HttpCode(200)
+  @UseFilters(PaymentExceptionFilter)
   @Post('callback/streamer/:streamer_id')
   async streamerPaymentCallback(
     @Param('streamer_id') streamer_id: string,
@@ -70,21 +84,24 @@ export class PaymentController {
       message: res.memo,
       name: res.doner_name,
     });
-    await this.slService.createDonation(
-      {
-        name: res.doner_name,
-        amount: res.total_amount,
-        currency: 'USD',
-        identifier: nanoid(),
-        message: res.memo,
-      },
-      streamer.accounts[0].access_token!
-    );
+    if (streamer.accounts.length) {
+      await this.slService.createDonation(
+        {
+          name: res.doner_name,
+          amount: res.total_amount,
+          currency: 'USD',
+          identifier: nanoid(),
+          message: res.memo,
+        },
+        streamer.accounts[0].access_token!
+      );
+    }
     return {
       message: 'success',
     };
   }
   // this callback is for dinger account creation fee payment.
+  // @To-Do refactor for sponser purpose
   @UseGuards(CallbackValidationGuard)
   @HttpCode(200)
   @UseFilters(PaymentExceptionFilter)
