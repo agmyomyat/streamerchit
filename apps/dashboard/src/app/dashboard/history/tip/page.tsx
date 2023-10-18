@@ -44,7 +44,9 @@ export default function TipHistoryPage() {
   return (
     <div className="flex flex-col w-full">
       <TipHistoryTable data={data} />
-      <PaginationButtons hasMore={data?.length === 10} />
+      <div className="self-end">
+        <PaginationButtons hasMore={data?.length === 10} />
+      </div>
     </div>
   );
 }

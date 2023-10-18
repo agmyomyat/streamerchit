@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 interface PaginationButtonsProps {
   hasMore: boolean;
@@ -12,14 +13,14 @@ export function usePaginationButtons() {
           onClick={() => setPage((prev) => prev - 1)}
           disabled={page === 1}
         >
-          prev
+          <ChevronLeft />
         </Button>
         <div className="w-10 text-center">{page}</div>
         <Button
           disabled={!props.hasMore}
           onClick={() => setPage((prev) => prev + 1)}
         >
-          next
+          <ChevronRight />
         </Button>
       </div>
     );
