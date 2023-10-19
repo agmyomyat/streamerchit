@@ -67,34 +67,39 @@ export class PaymentController {
     const decrypted: DescryptedCallbackRequestBody = JSON.parse(
       decryption(streamer.dinger_info?.callback_key, body.paymentResult)
     );
-    const res = await this.prisma.paymentTransaction.update({
-      where: { id: decrypted.merchantOrderId },
-      data: {
-        completed_at: new Date(),
-        status: decrypted.transactionStatus,
-        transaction_id: decrypted.transactionId,
-        donation: {
-          create: { user: { connect: { id: streamer_id } } },
-        },
-      },
-    });
-    this.alertBox.donationAlertEmit(res.user_id, {
-      amount: res.total_amount,
-      message: res.memo,
-      name: res.doner_name,
-    });
-    if (streamer.accounts.length) {
-      await this.slService.createDonation(
-        {
-          name: res.doner_name,
+    await this.prisma.$transaction(
+      async (tx) => {
+        const res = await tx.paymentTransaction.update({
+          where: { id: decrypted.merchantOrderId },
+          data: {
+            completed_at: new Date(),
+            status: decrypted.transactionStatus,
+            transaction_id: decrypted.transactionId,
+            donation: {
+              create: { user: { connect: { id: streamer_id } } },
+            },
+          },
+        });
+        this.alertBox.donationAlertEmit(res.user_id, {
           amount: res.total_amount,
-          currency: 'USD',
-          identifier: nanoid(),
           message: res.memo,
-        },
-        streamer.accounts[0].access_token!
-      );
-    }
+          name: res.doner_name,
+        });
+        if (streamer.accounts.length) {
+          await this.slService.createDonation(
+            {
+              name: res.doner_name,
+              amount: res.total_amount,
+              currency: 'USD',
+              identifier: nanoid(),
+              message: res.memo,
+            },
+            streamer.accounts[0].access_token!
+          );
+        }
+      },
+      { timeout: 10000 }
+    );
     return {
       message: 'success',
     };
