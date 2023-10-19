@@ -86,6 +86,7 @@ export default function TipPagePage() {
       GlobalLoader.set(false);
     }
     try {
+      GlobalLoader.set(true);
       await uploadS3PresignedFile(createFileData.presigned_upload_url, [
         file[0],
       ]);
@@ -93,6 +94,7 @@ export default function TipPagePage() {
       if (file_id) {
         deleteFileMutate({ file_id });
       }
+
       console.log(e);
       toast({
         title: 'something went wrong while uploading try again',

@@ -146,6 +146,7 @@ export default function Page() {
       GlobalLoader.set(false);
     }
     try {
+      GlobalLoader.set(true);
       await uploadS3PresignedFile(createFileData.presigned_upload_url, [
         file[0],
       ]);
