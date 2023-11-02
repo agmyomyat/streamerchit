@@ -33,9 +33,8 @@ export function NavBar() {
         <Link href={'/'} passHref>
           <div className="flex gap-1  ">
             <div className={cn('text-xl sm:text-3xl hover:cursor-pointer')}>
-              StreamerChit
+              Streamerchit
             </div>
-            <Heart size={'1.875rem'} />
             <div className="text-[0.625rem] text-blue-300 self-end">BETA</div>
           </div>
         </Link>

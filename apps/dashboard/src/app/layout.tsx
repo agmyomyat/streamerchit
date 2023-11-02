@@ -28,7 +28,7 @@ export default async function RootLayout({
         <Providers>
           <div className={'fixed top-0 w-full z-10'}>
             <PaymentRegisterationWarningBar />
-            <div className={cn(pacifico.className)}>
+            <div>
               <NavBar />
             </div>
           </div>
