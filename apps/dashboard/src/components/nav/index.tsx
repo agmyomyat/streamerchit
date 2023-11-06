@@ -8,6 +8,7 @@ import { useSCSession } from '@/lib/provider/session-checker';
 import { scSignOut } from '@/lib/auth/sc-sign-out';
 import { useEffect } from 'react';
 import { paymentRegisterationWarningState } from '@/global-stores/top-bar-noti';
+import { StreamerchitLogo } from '../icons/streamerchit-logo';
 export function NavBar() {
   const session = useSCSession();
   const path = usePathname();
@@ -34,6 +35,7 @@ export function NavBar() {
           <div className="flex gap-1  ">
             <div className={cn('text-xl sm:text-3xl hover:cursor-pointer')}>
               Streamerchit
+              {/* <StreamerchitLogo /> */}
             </div>
             <div className="text-[0.625rem] text-blue-300 self-end">BETA</div>
           </div>
