@@ -1,5 +1,5 @@
 ## Streamerchit
-StreamerChit is a donation platform designed to support Myanmar streamers. It provides an easy way for content creators to receive donations from their viewers and fans.
+StreamerChit is a demo donation platform integrating myanmar payments solution. It provides an easy way for content creators to receive donations from their viewers and fans.
 
 ## Features
 
