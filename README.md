@@ -14,5 +14,5 @@ StreamerChit is a demo donation platform integrating myanmar payments solution. 
 
 ## Consider sponsoring this project
 
-My goal is to help viewers support streamers. This platform does not take a cut from streamers, nor is there any fee. If you like this project and want to support it, you can reach out to me for donations via agmmdotdev@gmail.com. we will mention your brand in our github page and facebook page or tip directly via https://streamerchit.com/streamerchit/tip
+My goal is to help viewers support streamers. This platform does not take a cut from streamers, nor is there any fee. If you like this project and want to support it, you can reach out to me for donations via agmmdotdev@gmail.com.
 
