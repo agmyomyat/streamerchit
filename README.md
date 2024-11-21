@@ -4,10 +4,11 @@ StreamerChit is a demo donation platform integrating myanmar payments solution. 
 ## Features
 
 - Donation processing for Myanmar streamers.
-- Accepts payments through 16 different payment methods.
+- Accepts payments through 16 different payment methods using dinger (dinger.asia) for more infomation.
 - Integrate with OBS or XSplit using a browser source.
 - Integrate with Streamlabs account and use the full features of streamlabs
 ## Stacks
+- monorepo (turbo)
 - Backend: Nestjs.
 - Frontend: nextjs and react
 
